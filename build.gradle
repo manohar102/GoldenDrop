@@ -17,21 +17,26 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.hibernate.orm:hibernate-core:6.4.2.Final'
-	implementation 'mysql:mysql-connector-java:8.0.28'
-	implementation 'com.google.guava:guava:11.0.2'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter'
-	annotationProcessor 'org.projectlombok:lombok'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.hibernate:hibernate-entitymanager:5.5.6.Final'
+
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	implementation 'mysql:mysql-connector-java:8.0.28'
+	implementation 'com.google.guava:guava:11.0.2'
 	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
-//	implementation 'org.hibernate:hibernate-annotations:3.5.6-Final'
+	compileOnly 'org.projectlombok:lombok:1.18.24'
+	annotationProcessor 'org.projectlombok:lombok:1.18.24'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	implementation 'commons-io:commons-io:2.11.0'
+	implementation 'org.flywaydb:flyway-core:10.6.0'
+	implementation 'org.flywaydb:flyway-mysql:10.6.0'
 }
 
 tasks.named('test') {
