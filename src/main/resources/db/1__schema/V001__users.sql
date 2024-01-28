@@ -6,6 +6,7 @@ CREATE TABLE users
     `email`         varchar(250) NOT NULL,
     `password`      varchar(256) NOT NULL,
     `created_at`    datetime DEFAULT NULL,
+    `role`          varchar(256) DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY uk_email (`email`)
 ) ENGINE = InnoDB

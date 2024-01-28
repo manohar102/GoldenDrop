@@ -1,20 +1,20 @@
 package com.techbuddy.goldendrop.model;
 
 
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Table;
 
+@Entity
 @Table(name = "users")
 @Data
+@ToString
 public class User extends BaseModel {
 
-    @Column(name = "id")
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -27,4 +27,12 @@ public class User extends BaseModel {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
+    public Boolean getIsDeleted() {
+        return true;
+    }
 }
