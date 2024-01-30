@@ -134,14 +134,13 @@ public class JWTTokenService implements Serializable {
 
     public APIToken parseToken(String token) {
         try {
-            Claims body = Jwts.parser()
-                    .verifyWith(getSecretKey()).build()
-                    .parseUnsecuredClaims(token)
-                    .getPayload();
+            Claims body = (Claims) Jwts.parser().
+                    verifyWith(getSecretKey()).
+                    build().parse(token).getPayload();
 
             UserRole userRole = null;
             Long userId = null;
-            if (body.get("agentType") != null) {
+            if (body.get("role") != null) {
                 userRole = Enum.valueOf(UserRole.class, (String) body.get("role"));
             }
             if (body.get("userId") != null) {

@@ -63,6 +63,7 @@ public class WebSecurityConfig {
                                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(loginFilter(), JwtAuthenticationFilter.class);
         http.cors(Customizer.withDefaults());
         return http.build();
     }

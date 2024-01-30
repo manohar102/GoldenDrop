@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -61,11 +62,11 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
         String jwtCookie = getJWTCookieValue(request);
         if(jwtCookie != null) {
             APIToken apiToken = jwtTokenService.parseToken(jwtCookie);
-            User user = userService.findByEmail(apiToken.getEmail());
-            if (user.getIsDeleted()) {
-                throw new UserDeletedException("User has been deleted");
+            User user = userService.loadUserByUsername(apiToken.getEmail());
+            if (!user.isEnabled()) {
+                throw new UserDeletedException("User is not active, please check with admin.");
             }
-            auth = new UsernamePasswordAuthenticationToken(user, null, null);
+            auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         }
         if (auth == null) {
             throw new BadCredentialsException("AUTH TOKEN MISSING");

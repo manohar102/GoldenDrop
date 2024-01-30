@@ -1,5 +1,6 @@
 package com.techbuddy.goldendrop.request;
 
+import com.techbuddy.goldendrop.model.UserRole;
 import lombok.Data;
 
 @Data
@@ -9,4 +10,5 @@ public class UserRequest {
     private String lastName;
     private String email;
     private String password;
+    private UserRole role;
 }

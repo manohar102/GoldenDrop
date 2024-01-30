@@ -59,10 +59,9 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             try {
                 LoginRequest loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
                 log.info(String.format("Attempting Authentication for username : %s", loginRequest.getEmail()));
-
-                User user = userService.findByEmail(loginRequest.getEmail());
+                User user = userService.loadUserByUsername(loginRequest.getEmail());
                 if(authenticate(user, loginRequest)){
-                    auth = new UsernamePasswordAuthenticationToken(user, null, null);
+                    auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 } else {
                     throw new Exception("Authentication Failure, Invalid Password");
                 }
@@ -94,7 +93,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             response.setContentType("application/json;charset=UTF-8");
             response.setHeader("Cache-Control", "no-cache");
             User user = (User) authResult.getPrincipal();
-            APIToken apiToken = new APIToken(user.getId(), user.getEmail(), user.getRole());
+            APIToken apiToken = new APIToken(user.getId(), user.getUsername(), user.getRole());
             String token = jwtService.generateToken(apiToken);
             response.setContentType("application/json");
             Cookie cookie = new Cookie(JWTTokenService.JWT_COOKIE_NAME, token);
