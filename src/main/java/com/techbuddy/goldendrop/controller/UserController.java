@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +28,7 @@ public class UserController {
     private final UserMapper mapper;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    @GetMapping
+    @GetMapping("/users")
     @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     public List<UserDTO> index() {
         log.info("Request GET /user");
@@ -34,11 +36,15 @@ public class UserController {
         return mapper.map(users);
     }
 
-    @GetMapping("/{id}")
-    public UserDTO show(@PathVariable("id") Long id) throws Exception {
-        log.info(String.format("Request GET /user/{%d}", id));
-        User user = service.findById(id);
-        return mapper.map(user);
+    @GetMapping("/")
+    public UserDTO show() throws Exception {
+        log.info("Request GET /user");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() != null) {
+            User user = (User) auth.getPrincipal();
+            return mapper.map(user);
+        }
+        throw new Exception("User Not found");
     }
 
     @PostMapping("/invite")
