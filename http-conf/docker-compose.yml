@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  httpd:
+    image: dev-httpd:latest
+    container_name: alwaystech
+    build:
+      ./
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./server.crt:/usr/local/apache2/ssl/server.crt
+      - ./server.key:/usr/local/apache2/ssl/server.key
+      - ./ssl.conf:/usr/local/apache2/conf.d/ssl.conf
+      - ./rules.conf:/usr/local/apache2/conf.d/rules.conf
+      - ./common.conf:/usr/local/apache2/conf.d/common.conf
+    restart: always
