@@ -28,7 +28,7 @@ public class UserController {
     private final UserMapper mapper;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    @GetMapping("/users")
+    @GetMapping("/list")
     @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     public List<UserDTO> index() {
         log.info("Request GET /user");
@@ -36,7 +36,7 @@ public class UserController {
         return mapper.map(users);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public UserDTO show() throws Exception {
         log.info("Request GET /user");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
