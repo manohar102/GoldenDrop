@@ -4,7 +4,8 @@ CREATE TABLE stock_detail
     `product_price`    varchar(250) DEFAULT NULL,
     `type`     varchar(3) DEFAULT NULL,
     `quantity`         int(250) NOT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8
-  COLLATE = utf8_unicode_ci;
+    `product_id`         bigint(20) NOT NULL,
+    `created_at`    datetime DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (product_id) REFERENCES product(id)
+);

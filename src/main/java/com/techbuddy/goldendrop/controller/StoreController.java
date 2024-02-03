@@ -1,7 +1,7 @@
 package com.techbuddy.goldendrop.controller;
 
-import com.techbuddy.goldendrop.controller.request.ProductRequest;
-import com.techbuddy.goldendrop.controller.response.ProductResponse;
+import com.techbuddy.goldendrop.controller.request.StoreRequest;
+import com.techbuddy.goldendrop.controller.response.StoreResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -15,22 +15,21 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/store")
 @Validated
-public class ProductController {
+public class StoreController {
 
-    private ProductService productService;
+    private StoreService storeService;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public StoreController(StoreService storeService) {
+        this.storeService = storeService;
     }
 
     @PostMapping
-    @Operation(summary = "Create or update product and stock details")
+    @Operation(summary = "Create a store")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<ProductResponse> createOrUpdate(
-            @Valid @RequestBody @NotNull(message = "productRequest " + "cannot be " + "null")
-                    ProductRequest productRequest) {
-        return ResponseEntity.ok(productService.createOrUpdate(productRequest));
+    public ResponseEntity<StoreResponse> createOrUpdate(
+            @Valid @RequestBody @NotNull(message = "storeRequest " + "cannot be " + "null") StoreRequest storeRequest) {
+        return ResponseEntity.ok(storeService.create(storeRequest));
     }
 }

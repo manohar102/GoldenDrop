@@ -1,26 +1,25 @@
 package com.techbuddy.goldendrop.model;
 
-
 import com.techbuddy.goldendrop.controller.request.ProductRequest;
 import com.techbuddy.goldendrop.enums.ProductType;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.List;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Table;
 import lombok.NoArgsConstructor;
 
-@Table(name = "product")
+@Entity(name = "product")
 @Data
 @Builder
 @NoArgsConstructor
@@ -29,6 +28,7 @@ public class Product extends BaseModel {
 
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Integer id;
 
     @Column(name = "brand_name")
@@ -38,7 +38,7 @@ public class Product extends BaseModel {
     @Enumerated(EnumType.STRING)
     private ProductType type;
 
-    @OneToMany(mappedBy="product", cascade= CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StockDetail> stockDetails;
 
     @ManyToOne
@@ -46,24 +46,28 @@ public class Product extends BaseModel {
     private Store store;
 
     public static Product buildFromRequest(ProductRequest productRequest, Store store) {
-       return  Product.builder()
-            .brandName(productRequest.getBrandName())
-            .type(productRequest.getProductType())
-            .stockDetails(List.of(StockDetail.builder().type(productRequest.getStockTransactionType())
-                                      .productPrice(productRequest.getProductPrice())
-                                      .quantity(productRequest.getQuantity())
-                                      .build()))
-            .store(store)
-            .build();
+        Product product = Product.builder()
+                .brandName(productRequest.getBrandName())
+                .type(productRequest.getProductType())
+                .store(store)
+                .build();
+        product.stockDetails = List.of(StockDetail.builder()
+                .type(productRequest.getStockTransactionType())
+                .productPrice(productRequest.getProductPrice())
+                .quantity(productRequest.getQuantity())
+                .product(product)
+                .build());
+        return product;
     }
 
-    public static Product buildUpdatedStockDetailsOfAProduct(ProductRequest productRequest,
-                                                             Product product) {
-        product.getStockDetails().add(StockDetail.builder()
-                                                 .productPrice(productRequest.getProductPrice())
-                                                 .quantity(productRequest.getQuantity())
-                                                 .type(productRequest.getStockTransactionType())
-                                                 .build());
+    public static Product buildUpdatedStockDetailsOfAProduct(ProductRequest productRequest, Product product) {
+        product.getStockDetails()
+                .add(StockDetail.builder()
+                        .productPrice(productRequest.getProductPrice())
+                        .quantity(productRequest.getQuantity())
+                        .type(productRequest.getStockTransactionType())
+                        .product(product)
+                        .build());
         return product;
     }
 }

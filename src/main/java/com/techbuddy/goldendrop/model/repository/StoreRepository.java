@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface StoreRepository extends JpaRepository<Store, Integer> {
 
     Optional<Store> findStoreById(Integer id);
+
+    Optional<Store> findStoreByLicenseId(String licenseId);
 }

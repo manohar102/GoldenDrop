@@ -1,17 +1,20 @@
 package com.techbuddy.goldendrop.model;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table(name = "stock_detail")
+@Entity(name = "stock_detail")
 @Data
 @Builder
 @AllArgsConstructor
@@ -19,9 +22,9 @@ import lombok.NoArgsConstructor;
 public class StockDetail extends BaseModel {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Integer id;
 
-    @Column(name = "price")
     private String productPrice;
 
     @Column(name = "type")
@@ -30,4 +33,8 @@ public class StockDetail extends BaseModel {
 
     @Column(name = "quantity")
     private int quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 }

@@ -19,8 +19,8 @@ public class ProductService {
     private ProductRepository productRepository;
     private StoreService storeService;
 
-    public ProductService(StoreRepository storeRepository, ProductRepository productRepository,
-                          StoreService storeService) {
+    public ProductService(
+            StoreRepository storeRepository, ProductRepository productRepository, StoreService storeService) {
         this.storeRepository = storeRepository;
         this.productRepository = productRepository;
         this.storeService = storeService;
@@ -31,10 +31,9 @@ public class ProductService {
         Store store = storeService.fetchStoreById(productRequest.getStoreId());
         Product productToBeSavedOrUpdated;
 
-        if(productRequest.getProductId() == null) {
-            productToBeSavedOrUpdated =  Product.buildFromRequest(productRequest, store);
-        }
-        else {
+        if (productRequest.getProductId() == null) {
+            productToBeSavedOrUpdated = Product.buildFromRequest(productRequest, store);
+        } else {
             Product product = fetchProductById(productRequest.getProductId());
             productToBeSavedOrUpdated = buildUpdatedStockDetailsOfAProduct(productRequest, product);
         }
@@ -42,14 +41,11 @@ public class ProductService {
         return ProductResponse.buildFromEntity(productToBeSavedOrUpdated);
     }
 
-
-
     private Product fetchProductById(Integer productId) {
         Optional<Product> product = productRepository.findProductById(productId);
-        if(product.isEmpty()) {
+        if (product.isEmpty()) {
             throw new InvalidProductException("Invalid product id: " + productId);
         }
         return product.get();
     }
-
 }
