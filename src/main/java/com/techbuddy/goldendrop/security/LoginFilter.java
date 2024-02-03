@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -24,8 +25,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-
-import java.io.IOException;
 
 @Log4j2
 public class LoginFilter extends AbstractAuthenticationProcessingFilter {
@@ -42,25 +41,23 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
     @Autowired
     AuthenticationManager authenticationManager;
 
-
-    private final RequestMatcher loginRequestMatcher = new AntPathRequestMatcher("/login",
-            HttpMethod.POST.toString());
+    private final RequestMatcher loginRequestMatcher = new AntPathRequestMatcher("/login", HttpMethod.POST.toString());
 
     public LoginFilter(String string) {
         super(string);
     }
 
     @Override
-    public Authentication attemptAuthentication( HttpServletRequest request, HttpServletResponse response)
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
 
         Authentication auth = null;
-        if(isLoginRequest(request)){
+        if (isLoginRequest(request)) {
             try {
                 LoginRequest loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
                 log.info(String.format("Attempting Authentication for username : %s", loginRequest.getEmail()));
                 User user = userService.loadUserByUsername(loginRequest.getEmail());
-                if(authenticate(user, loginRequest)){
+                if (authenticate(user, loginRequest)) {
                     auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 } else {
                     throw new Exception("Authentication Failure, Invalid Password");
@@ -83,11 +80,13 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        return super.requiresAuthentication(request, response) && isLoginRequest(request)  ;
+        return super.requiresAuthentication(request, response) && isLoginRequest(request);
     }
+
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-                                            Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(
+            HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult)
+            throws IOException, ServletException {
         if (authResult != null) {
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType("application/json;charset=UTF-8");
@@ -98,7 +97,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             response.setContentType("application/json");
             Cookie cookie = new Cookie(JWTTokenService.JWT_COOKIE_NAME, token);
             cookie.setPath("/");
-            cookie.setMaxAge(24*3600*3600);
+            cookie.setMaxAge(24 * 3600 * 3600);
             cookie.isHttpOnly();
             response.addCookie(cookie);
 
@@ -111,5 +110,4 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
     private boolean isLoginRequest(HttpServletRequest request) {
         return loginRequestMatcher.matches(request);
     }
-
 }

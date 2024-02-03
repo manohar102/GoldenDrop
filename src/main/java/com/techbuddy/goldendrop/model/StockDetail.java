@@ -23,7 +23,7 @@ public class StockDetail extends BaseModel {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Integer id;
+    private Long id;
 
     private String productPrice;
 

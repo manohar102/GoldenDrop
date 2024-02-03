@@ -1,5 +1,6 @@
 package com.techbuddy.goldendrop.configuration;
 
+import com.techbuddy.goldendrop.constant.URLConstants;
 import com.techbuddy.goldendrop.security.JwtAuthenticationFilter;
 import com.techbuddy.goldendrop.security.LoginFilter;
 import jakarta.annotation.Resource;
@@ -39,8 +40,7 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(
-            UserDetailsService userDetailsService,
-            PasswordEncoder passwordEncoder) {
+            UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder);
@@ -48,19 +48,26 @@ public class WebSecurityConfig {
         return new ProviderManager(authenticationProvider);
     }
 
-//    @Bean
-//    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-//    }
+    //    @Bean
+    //    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+    //        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    //    }
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable).authorizeRequests()
-                .requestMatchers(HttpMethod.POST, "/user/register", "/login").permitAll()
-                .anyRequest().authenticated()
-                .and().sessionManagement(
-                        httpSecuritySessionManagementConfigurer ->
-                                httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeRequests()
+                .requestMatchers(HttpMethod.POST, URLConstants.REGISTER_URL, URLConstants.LOGIN_URL)
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, URLConstants.SWAGGER_API_DOCS_URL)
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, URLConstants.SWAGGER_URL)
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .sessionManagement(httpSecuritySessionManagementConfigurer ->
+                        httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(loginFilter(), JwtAuthenticationFilter.class);
@@ -86,5 +93,4 @@ public class WebSecurityConfig {
         loginFilter.setAuthenticationManager(authenticationManager(userDetailsService, passwordEncoder()));
         return loginFilter;
     }
-
 }

@@ -2,6 +2,7 @@ package com.techbuddy.goldendrop.controller;
 
 import com.techbuddy.goldendrop.controller.request.ProductRequest;
 import com.techbuddy.goldendrop.controller.response.ProductResponse;
+import com.techbuddy.goldendrop.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

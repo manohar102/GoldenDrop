@@ -1,6 +1,5 @@
 package com.techbuddy.goldendrop.security;
 
-
 import com.techbuddy.goldendrop.model.UserRole;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,5 @@
 package com.techbuddy.goldendrop.model;
 
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

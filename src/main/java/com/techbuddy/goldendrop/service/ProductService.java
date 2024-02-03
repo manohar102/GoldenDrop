@@ -1,4 +1,4 @@
-package com.techbuddy.goldendrop.controller;
+package com.techbuddy.goldendrop.service;
 
 import static com.techbuddy.goldendrop.model.Product.buildUpdatedStockDetailsOfAProduct;
 
@@ -8,20 +8,15 @@ import com.techbuddy.goldendrop.exception.InvalidProductException;
 import com.techbuddy.goldendrop.model.Product;
 import com.techbuddy.goldendrop.model.Store;
 import com.techbuddy.goldendrop.model.repository.ProductRepository;
-import com.techbuddy.goldendrop.model.repository.StoreRepository;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService {
-
-    private StoreRepository storeRepository;
     private ProductRepository productRepository;
     private StoreService storeService;
 
-    public ProductService(
-            StoreRepository storeRepository, ProductRepository productRepository, StoreService storeService) {
-        this.storeRepository = storeRepository;
+    public ProductService(ProductRepository productRepository, StoreService storeService) {
         this.productRepository = productRepository;
         this.storeService = storeService;
     }

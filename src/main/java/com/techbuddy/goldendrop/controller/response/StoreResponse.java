@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class StoreResponse {
-
-    private Integer storeId;
+    private Long storeId;
     private String licenseId;
 
     public static StoreResponse buildFromEntity(Store store) {

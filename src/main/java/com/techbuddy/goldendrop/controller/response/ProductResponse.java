@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductResponse {
 
-    private Integer productId;
+    private Long productId;
 
     public static ProductResponse buildFromEntity(Product product) {
         return ProductResponse.builder().productId(product.getId()).build();

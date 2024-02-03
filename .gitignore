@@ -37,3 +37,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Compiled Java class files
+*.class

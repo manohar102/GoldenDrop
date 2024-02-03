@@ -29,7 +29,7 @@ public class Product extends BaseModel {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Integer id;
+    private Long id;
 
     @Column(name = "brand_name")
     private String brandName;
@@ -51,6 +51,7 @@ public class Product extends BaseModel {
                 .type(productRequest.getProductType())
                 .store(store)
                 .build();
+
         product.stockDetails = List.of(StockDetail.builder()
                 .type(productRequest.getStockTransactionType())
                 .productPrice(productRequest.getProductPrice())

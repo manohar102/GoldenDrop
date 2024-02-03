@@ -1,6 +1,5 @@
 package com.techbuddy.goldendrop.request;
 
-
 import lombok.Data;
 
 @Data

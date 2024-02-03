@@ -1,12 +1,12 @@
 package com.techbuddy.goldendrop.controller;
 
-
 import com.techbuddy.goldendrop.dto.UserDTO;
 import com.techbuddy.goldendrop.mapper.UserMapper;
 import com.techbuddy.goldendrop.model.User;
 import com.techbuddy.goldendrop.model.UserStatus;
 import com.techbuddy.goldendrop.request.UserRequest;
 import com.techbuddy.goldendrop.service.UserService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Log4j2
 @RestController
@@ -57,5 +55,4 @@ public class UserController {
         service.save(user);
         return mapper.map(user);
     }
-
 }
