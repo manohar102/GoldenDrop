@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -37,12 +36,6 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
     private final List<RequestMatcher> swaggerRequestMatcher = List.of(
             new AntPathRequestMatcher(URLConstants.SWAGGER_URL, HttpMethod.GET.toString()),
             new AntPathRequestMatcher(URLConstants.SWAGGER_API_DOCS_URL, HttpMethod.GET.toString()));
-
-    @Value("${jwt.header.string}")
-    public String HEADER_STRING;
-
-    @Value("${jwt.token.prefix}")
-    public String TOKEN_PREFIX;
 
     @Autowired
     UserService userService;

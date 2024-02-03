@@ -97,7 +97,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             response.setContentType("application/json");
             Cookie cookie = new Cookie(JWTTokenService.JWT_COOKIE_NAME, token);
             cookie.setPath("/");
-            cookie.setMaxAge(24 * 3600 * 3600);
+            cookie.setMaxAge(24 * 3600);
             cookie.isHttpOnly();
             response.addCookie(cookie);
 
