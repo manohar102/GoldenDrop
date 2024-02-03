@@ -1,5 +1,7 @@
 package com.techbuddy.goldendrop.model;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 import com.techbuddy.goldendrop.controller.request.ProductRequest;
 import com.techbuddy.goldendrop.enums.ProductType;
 import jakarta.persistence.CascadeType;
@@ -38,7 +40,7 @@ public class Product extends BaseModel {
     @Enumerated(EnumType.STRING)
     private ProductType type;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", fetch = LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StockDetail> stockDetails;
 
     @ManyToOne

@@ -20,8 +20,9 @@ public class ProductRequest {
     @NotNull(message = "storeId cannot be null")
     private int storeId;
 
-    @NotBlank(message = "productPrice cannot be null")
-    private String productPrice;
+    @NotNull(message = "productPrice cannot be null")
+    @Min(value = 1, message = "productPrice must be greater than zero")
+    private Double productPrice;
 
     @NotNull(message = "stockTransactionType cannot be null")
     private StockTransactionType stockTransactionType;

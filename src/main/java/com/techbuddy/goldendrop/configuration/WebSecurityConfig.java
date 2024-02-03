@@ -73,10 +73,13 @@ public class WebSecurityConfig {
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutRequestMatcher(new AntPathRequestMatcher(URLConstants.LOGOUT_URL, "GET")));
-        http.logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
-                .deleteCookies("JSESSIONID").deleteCookies(JWTTokenService.JWT_COOKIE_NAME).invalidateHttpSession(true));
-
+        http.logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutRequestMatcher(
+                new AntPathRequestMatcher(URLConstants.LOGOUT_URL, "GET")));
+        http.logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
+                .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
+                .deleteCookies("JSESSIONID")
+                .deleteCookies(JWTTokenService.JWT_COOKIE_NAME)
+                .invalidateHttpSession(true));
 
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(loginFilter(), JwtAuthenticationFilter.class);

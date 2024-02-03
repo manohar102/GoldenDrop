@@ -25,7 +25,7 @@ public class StockDetail extends BaseModel {
     @Id
     private Long id;
 
-    private String productPrice;
+    private Double productPrice;
 
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
