@@ -1,4 +1,4 @@
-package com.techbuddy.goldendrop.controller.request;
+package com.techbuddy.goldendrop.request;
 
 import com.techbuddy.goldendrop.enums.ProductType;
 import com.techbuddy.goldendrop.model.StockTransactionType;

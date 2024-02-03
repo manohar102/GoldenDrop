@@ -2,26 +2,26 @@ package com.techbuddy.goldendrop.service;
 
 import static com.techbuddy.goldendrop.model.Product.buildUpdatedStockDetailsOfAProduct;
 
-import com.techbuddy.goldendrop.controller.request.ProductRequest;
-import com.techbuddy.goldendrop.controller.response.ProductResponse;
+import com.techbuddy.goldendrop.dto.ProductDTO;
 import com.techbuddy.goldendrop.exception.InvalidProductException;
+import com.techbuddy.goldendrop.mapper.ProductMapper;
 import com.techbuddy.goldendrop.model.Product;
 import com.techbuddy.goldendrop.model.Store;
 import com.techbuddy.goldendrop.model.repository.ProductRepository;
+import com.techbuddy.goldendrop.request.ProductRequest;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProductService {
-    private ProductRepository productRepository;
-    private StoreService storeService;
+    private final ProductRepository productRepository;
+    private final StoreService storeService;
+    private final ProductMapper productMapper;
 
-    public ProductService(ProductRepository productRepository, StoreService storeService) {
-        this.productRepository = productRepository;
-        this.storeService = storeService;
-    }
-
-    public ProductResponse createOrUpdate(ProductRequest productRequest) {
+    public ProductDTO createOrUpdate(ProductRequest productRequest) {
 
         Store store = storeService.fetchStoreById(productRequest.getStoreId());
         Product productToBeSavedOrUpdated;
@@ -34,7 +34,7 @@ public class ProductService {
             productToBeSavedOrUpdated = buildUpdatedStockDetailsOfAProduct(productRequest, product);
         }
         productRepository.save(productToBeSavedOrUpdated);
-        return ProductResponse.buildFromEntity(productToBeSavedOrUpdated);
+        return productMapper.map(productToBeSavedOrUpdated);
     }
 
     private Product fetchProductByProductIdAndStoreId(Integer productId, Integer storeId) {

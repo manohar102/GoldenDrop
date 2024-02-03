@@ -1,6 +1,6 @@
 package com.techbuddy.goldendrop.model;
 
-import com.techbuddy.goldendrop.controller.request.StoreRequest;
+import com.techbuddy.goldendrop.request.StoreRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,13 +26,4 @@ public class Store extends BaseModel {
     private String name;
     private String email;
     private String address;
-
-    public static Store buildFromRequest(StoreRequest storeRequest) {
-        return Store.builder()
-                .address(storeRequest.getAddress())
-                .licenseId(storeRequest.getLicenseId())
-                .name(storeRequest.getName())
-                .email(storeRequest.getEmail())
-                .build();
-    }
 }

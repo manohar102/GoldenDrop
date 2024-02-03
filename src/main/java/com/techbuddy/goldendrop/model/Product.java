@@ -2,8 +2,8 @@ package com.techbuddy.goldendrop.model;
 
 import static jakarta.persistence.FetchType.LAZY;
 
-import com.techbuddy.goldendrop.controller.request.ProductRequest;
 import com.techbuddy.goldendrop.enums.ProductType;
+import com.techbuddy.goldendrop.request.ProductRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,30 +1,31 @@
 package com.techbuddy.goldendrop.service;
 
-import com.techbuddy.goldendrop.controller.request.StoreRequest;
-import com.techbuddy.goldendrop.controller.response.StoreResponse;
+import com.techbuddy.goldendrop.dto.StoreDTO;
 import com.techbuddy.goldendrop.exception.InvalidStoreException;
 import com.techbuddy.goldendrop.exception.StoreConflictException;
+import com.techbuddy.goldendrop.mapper.StoreMapper;
 import com.techbuddy.goldendrop.model.Store;
 import com.techbuddy.goldendrop.model.repository.StoreRepository;
+import com.techbuddy.goldendrop.request.StoreRequest;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StoreService {
 
-    private StoreRepository storeRepository;
+    private final StoreRepository storeRepository;
+    private final StoreMapper storeMapper;
 
-    public StoreService(StoreRepository storeRepository) {
-        this.storeRepository = storeRepository;
-    }
-
-    public StoreResponse create(StoreRequest storeRequest) {
+    public StoreDTO create(StoreRequest storeRequest) {
         Optional<Store> existingStore = fetchStoreByLisenceId(storeRequest);
         if (existingStore.isPresent()) {
-            throw new StoreConflictException("Store " + "already exixts with given license Id");
+            throw new StoreConflictException("Store " + "already exists with given license Id");
         }
-        Store store = storeRepository.save(Store.buildFromRequest(storeRequest));
-        return StoreResponse.buildFromEntity(store);
+        Store store = storeRepository.save(storeMapper.map(storeRequest));
+        return storeMapper.map(store);
     }
 
     public Store fetchStoreById(Integer storeId) {

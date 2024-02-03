@@ -1,4 +1,4 @@
-package com.techbuddy.goldendrop.controller.request;
+package com.techbuddy.goldendrop.request;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
