@@ -21,18 +21,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = InvalidStoreException.class)
     public ResponseEntity invalidStoreException(InvalidStoreException exception) {
-        Map<String, String> message = new HashMap<String, String>();
-        message.put("message", exception.getMessage());
-        message.put("status", "error");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+        Map<String, List<String>> errorMessagesMap = new HashMap<>();
+        errorMessagesMap.put("errorMessages", List.of(exception.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesMap);
     }
 
     @ExceptionHandler(value = InvalidProductException.class)
     public ResponseEntity invalidProductException(InvalidProductException exception) {
-        Map<String, String> message = new HashMap<String, String>();
-        message.put("message", exception.getMessage());
-        message.put("status", "error");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+        Map<String, List<String>> errorMessagesMap = new HashMap<>();
+        errorMessagesMap.put("errorMessages", List.of(exception.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesMap);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -40,22 +38,25 @@ public class GlobalExceptionHandler {
         List<String> errorMessagesList = exception.getBindingResult().getAllErrors().stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesList);
+        Map<String, List<String>> errorMessagesMap = new HashMap<>();
+        errorMessagesMap.put("errorMessages", errorMessagesList);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesMap);
     }
 
     @ExceptionHandler(value = StoreConflictException.class)
     public ResponseEntity storeConflictException(StoreConflictException exception) {
-        Map<String, String> message = new HashMap<String, String>();
-        message.put("message", exception.getMessage());
-        message.put("status", "error");
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
+        Map<String, List<String>> errorMessagesMap = new HashMap<>();
+        errorMessagesMap.put("errorMessages", List.of(exception.getMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessagesMap);
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity constraintViolation(ConstraintViolationException exception) {
         List<String> templateMessages = new ArrayList<>();
         exception.getConstraintViolations().forEach(violation -> templateMessages.add(violation.getMessageTemplate()));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(templateMessages);
+        Map<String, List<String>> errorMessagesMap = new HashMap<>();
+        errorMessagesMap.put("errorMessages", templateMessages);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesMap);
     }
 
     @ExceptionHandler({HttpMessageNotReadableException.class})
@@ -64,7 +65,9 @@ public class GlobalExceptionHandler {
         if (StringUtils.hasText(exceptionMessage) && isEnumValidationError(exceptionMessage)) {
             return buildEnumValidationErrorResponse(exceptionMessage);
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMessage);
+        Map<String, List<String>> errorMessagesMap = new HashMap<>();
+        errorMessagesMap.put("errorMessages", List.of(exceptionMessage));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesMap);
     }
 
     private ResponseEntity buildEnumValidationErrorResponse(String exceptionMessage) {
@@ -73,7 +76,9 @@ public class GlobalExceptionHandler {
         log.error("Not a valid value for enum {} . Valid validEnumValues are {} ", enumClass, validEnumValues);
         String errorMessage =
                 String.format("Invalid enum value for %s. Valid validEnumValues are %s ", enumClass, validEnumValues);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        Map<String, List<String>> errorMessagesMap = new HashMap<>();
+        errorMessagesMap.put("errorMessages", List.of(errorMessage));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesMap);
     }
 
     private String getEnumClassFromErrorMessage(String exceptionMessage) {
