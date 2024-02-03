@@ -18,5 +18,4 @@ public class BaseModel implements Serializable {
     @Column(name = "created_at")
     @CreationTimestamp
     public Timestamp createdDate;
-
 }

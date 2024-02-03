@@ -14,8 +14,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableAsync
 public class GoldendropApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(GoldendropApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(GoldendropApplication.class, args);
+    }
 }
