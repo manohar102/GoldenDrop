@@ -34,17 +34,18 @@ public class ProductService {
         if (productRequest.getProductId() == null) {
             productToBeSavedOrUpdated = Product.buildFromRequest(productRequest, store);
         } else {
-            Product product = fetchProductById(productRequest.getProductId());
+            Product product =
+                    fetchProductByProductIdAndStoreId(productRequest.getProductId(), productRequest.getStoreId());
             productToBeSavedOrUpdated = buildUpdatedStockDetailsOfAProduct(productRequest, product);
         }
         productRepository.save(productToBeSavedOrUpdated);
         return ProductResponse.buildFromEntity(productToBeSavedOrUpdated);
     }
 
-    private Product fetchProductById(Integer productId) {
-        Optional<Product> product = productRepository.findProductById(productId);
+    private Product fetchProductByProductIdAndStoreId(Integer productId, Integer storeId) {
+        Optional<Product> product = productRepository.findProductByIdAndAndStoreId(productId, storeId);
         if (product.isEmpty()) {
-            throw new InvalidProductException("Invalid product id: " + productId);
+            throw new InvalidProductException("Invalid productId/StoreId");
         }
         return product.get();
     }
