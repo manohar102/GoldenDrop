@@ -2,11 +2,10 @@ package com.techbuddy.goldendrop.mapper;
 
 import com.techbuddy.goldendrop.dto.ProductDTO;
 import com.techbuddy.goldendrop.model.Product;
-import com.techbuddy.goldendrop.model.StockDetail;
 import com.techbuddy.goldendrop.model.Store;
 import com.techbuddy.goldendrop.request.ProductRequest;
-import java.util.List;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
@@ -19,5 +18,18 @@ import org.mapstruct.ReportingPolicy;
 public interface ProductMapper {
     ProductDTO map(Product product);
 
-    Product map(ProductRequest productRequest, Store store, List<StockDetail> stockDetailList);
+    @Mapping(target = "store", source = "store")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    Product map(ProductRequest productRequest, Store store);
+
+    @Mapping(target = "store", source = "store")
+    @Mapping(target = "id", source = "existingProduct.id")
+    @Mapping(target = "stockDetails", source = "existingProduct.stockDetails")
+    @Mapping(target = "createdDate", source = "existingProduct.createdDate")
+    @Mapping(target = "updatedDate", ignore = true)
+    @Mapping(target = "brandName", source = "productRequest.brandName")
+    @Mapping(target = "type", source = "productRequest.type")
+    @Mapping(target = "quantity", source = "productRequest.quantity")
+    Product map(ProductRequest productRequest, Store store, Product existingProduct);
 }

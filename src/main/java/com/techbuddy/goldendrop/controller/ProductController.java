@@ -26,7 +26,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    @Operation(summary = "Create or update product and stock details")
+    @Operation(summary = "Create a product")
     @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<ProductDTO> createOrUpdate(
             @Valid @RequestBody @NotNull(message = "productRequest " + "cannot be " + "null")

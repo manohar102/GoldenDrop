@@ -1,7 +1,5 @@
 package com.techbuddy.goldendrop.service;
 
-import static com.techbuddy.goldendrop.model.Product.buildUpdatedStockDetailsOfAProduct;
-
 import com.techbuddy.goldendrop.dto.ProductDTO;
 import com.techbuddy.goldendrop.exception.InvalidProductException;
 import com.techbuddy.goldendrop.mapper.ProductMapper;
@@ -27,14 +25,13 @@ public class ProductService {
         Product productToBeSavedOrUpdated;
 
         if (productRequest.getProductId() == null) {
-            productToBeSavedOrUpdated = Product.buildFromRequest(productRequest, store);
+            productToBeSavedOrUpdated = productMapper.map(productRequest, store);
         } else {
-            Product product =
+            Product existingProduct =
                     fetchProductByProductIdAndStoreId(productRequest.getProductId(), productRequest.getStoreId());
-            productToBeSavedOrUpdated = buildUpdatedStockDetailsOfAProduct(productRequest, product);
+            productToBeSavedOrUpdated = productMapper.map(productRequest, store, existingProduct);
         }
-        productRepository.save(productToBeSavedOrUpdated);
-        return productMapper.map(productToBeSavedOrUpdated);
+        return productMapper.map(productRepository.save(productToBeSavedOrUpdated));
     }
 
     private Product fetchProductByProductIdAndStoreId(Integer productId, Integer storeId) {

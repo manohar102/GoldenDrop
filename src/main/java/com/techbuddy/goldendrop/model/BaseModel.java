@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
@@ -17,4 +18,8 @@ public class BaseModel implements Serializable {
     @Column(name = "created_at")
     @CreationTimestamp
     public Timestamp createdDate;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    public Timestamp updatedDate;
 }

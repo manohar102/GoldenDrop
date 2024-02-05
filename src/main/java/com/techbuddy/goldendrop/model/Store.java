@@ -1,6 +1,5 @@
 package com.techbuddy.goldendrop.model;
 
-import com.techbuddy.goldendrop.request.StoreRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
