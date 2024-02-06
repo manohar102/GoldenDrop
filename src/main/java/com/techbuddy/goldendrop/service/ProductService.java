@@ -5,7 +5,7 @@ import com.techbuddy.goldendrop.exception.InvalidProductException;
 import com.techbuddy.goldendrop.mapper.ProductMapper;
 import com.techbuddy.goldendrop.model.Product;
 import com.techbuddy.goldendrop.model.Store;
-import com.techbuddy.goldendrop.model.repository.ProductRepository;
+import com.techbuddy.goldendrop.repository.ProductRepository;
 import com.techbuddy.goldendrop.request.ProductRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class ProductService {
         return productMapper.map(productRepository.save(productToBeSavedOrUpdated));
     }
 
-    private Product fetchProductByProductIdAndStoreId(Integer productId, Integer storeId) {
+    public Product fetchProductByProductIdAndStoreId(Long productId, Long storeId) {
         Optional<Product> product = productRepository.findProductByIdAndAndStoreId(productId, storeId);
         if (product.isEmpty()) {
             throw new InvalidProductException("Invalid productId/StoreId");

@@ -5,7 +5,7 @@ import com.techbuddy.goldendrop.exception.InvalidStoreException;
 import com.techbuddy.goldendrop.exception.StoreConflictException;
 import com.techbuddy.goldendrop.mapper.StoreMapper;
 import com.techbuddy.goldendrop.model.Store;
-import com.techbuddy.goldendrop.model.repository.StoreRepository;
+import com.techbuddy.goldendrop.repository.StoreRepository;
 import com.techbuddy.goldendrop.request.StoreRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class StoreService {
         return storeMapper.map(store);
     }
 
-    public Store fetchStoreById(Integer storeId) {
+    public Store fetchStoreById(Long storeId) {
         Optional<Store> store = storeRepository.findStoreById(storeId);
         if (store.isEmpty()) {
             throw new InvalidStoreException("Invalid store id: " + storeId);

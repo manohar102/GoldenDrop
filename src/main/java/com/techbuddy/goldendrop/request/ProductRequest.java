@@ -16,10 +16,10 @@ public class ProductRequest {
     private ProductType type;
 
     @NotNull(message = "storeId cannot be null")
-    private Integer storeId;
+    private Long storeId;
 
     @NotNull(message = "quantity cannot be null")
     private String quantity;
 
-    private Integer productId;
+    private Long productId;
 }
