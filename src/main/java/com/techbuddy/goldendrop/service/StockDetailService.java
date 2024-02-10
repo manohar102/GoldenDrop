@@ -1,9 +1,14 @@
 package com.techbuddy.goldendrop.service;
 
+import static com.techbuddy.goldendrop.model.StockTransactionType.isOutStock;
+
 import com.techbuddy.goldendrop.dto.StockDetailDTO;
+import com.techbuddy.goldendrop.exception.InvalidStockQuantityException;
 import com.techbuddy.goldendrop.mapper.StockDetailMapper;
 import com.techbuddy.goldendrop.model.Product;
+import com.techbuddy.goldendrop.model.ProductStockView;
 import com.techbuddy.goldendrop.model.StockDetail;
+import com.techbuddy.goldendrop.repository.ProductStockViewRepository;
 import com.techbuddy.goldendrop.repository.StockDetailRepository;
 import com.techbuddy.goldendrop.request.StockDetailRequest;
 import java.util.List;
@@ -18,6 +23,7 @@ public class StockDetailService {
     private final StockDetailMapper stockDetailMapper;
     private final ProductService productService;
     private final StockDetailRepository stockDetailRepository;
+    private final ProductStockViewRepository productStockViewRepository;
 
     public List<StockDetailDTO> create(List<StockDetailRequest> stockDetailsRequest) {
 
@@ -25,14 +31,29 @@ public class StockDetailService {
                 .map(request -> {
                     Product product = productService.fetchProductByProductIdAndStoreId(
                             request.getProductId(), request.getStoreId());
+                    validateStockQuantity(request, product);
                     return stockDetailMapper.map(request, product);
                 })
                 .toList();
 
-        // TODO - Flatten the in & out in product and validate it with out being saved in stock
-        // detail
         stockDetailRepository.saveAll(stockDetailListToBeSaved);
-
         return stockDetailMapper.map(stockDetailListToBeSaved);
+    }
+
+    private void validateStockQuantity(StockDetailRequest request, Product product) {
+        if (isOutStock(request.getType())) {
+            ProductStockView productStockView = productStockViewRepository.findProductStockViewById(product.getId());
+            throwExceptionIfGivenStockQuantityIsGreaterThanTotalInQuantity(request, productStockView);
+        }
+    }
+
+    private void throwExceptionIfGivenStockQuantityIsGreaterThanTotalInQuantity(
+            StockDetailRequest request, ProductStockView productStockView) {
+        if (request.getQuantity() + productStockView.getOutQuantity() > productStockView.getInQuantity()) {
+            throw new InvalidStockQuantityException("OUT quantity cannot be "
+                    + "greater than IN "
+                    + "quantity for the given "
+                    + "productId: " + request.getProductId());
+        }
     }
 }
