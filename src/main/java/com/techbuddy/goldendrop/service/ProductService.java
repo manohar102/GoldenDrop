@@ -4,9 +4,12 @@ import com.techbuddy.goldendrop.dto.ProductDTO;
 import com.techbuddy.goldendrop.exception.InvalidProductException;
 import com.techbuddy.goldendrop.mapper.ProductMapper;
 import com.techbuddy.goldendrop.model.Product;
+import com.techbuddy.goldendrop.model.ProductStockView;
 import com.techbuddy.goldendrop.model.Store;
 import com.techbuddy.goldendrop.repository.ProductRepository;
+import com.techbuddy.goldendrop.repository.ProductStockViewRepository;
 import com.techbuddy.goldendrop.request.ProductRequest;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +21,11 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final StoreService storeService;
     private final ProductMapper productMapper;
+    private final ProductStockViewRepository productStockViewRepository;
 
     public ProductDTO createOrUpdate(ProductRequest productRequest) {
 
-        Store store = storeService.fetchStoreById(productRequest.getStoreId());
+        Store store = storeService.validateAndFetchStoreId(productRequest.getStoreId());
         Product productToBeSavedOrUpdated;
 
         if (productRequest.getProductId() == null) {
@@ -40,5 +44,20 @@ public class ProductService {
             throw new InvalidProductException("Invalid productId/StoreId");
         }
         return product.get();
+    }
+
+    public List<ProductDTO> getProductsByStoreId(Long storeId) {
+        storeService.validateAndFetchStoreId(storeId);
+        List<ProductStockView> products = productStockViewRepository.findProductStockViewByStoreId(storeId);
+        return products.stream().map(productMapper::map).toList();
+    }
+
+    public List<ProductDTO> getTopFiveProducts(Long storeId) {
+        if (storeId != null) {
+            storeService.validateAndFetchStoreId(storeId);
+        }
+
+        List<ProductStockView> products = productStockViewRepository.findTop5ByStoreIdOrderByOutQuantityDesc(storeId);
+        return products.stream().map(productMapper::map).toList();
     }
 }

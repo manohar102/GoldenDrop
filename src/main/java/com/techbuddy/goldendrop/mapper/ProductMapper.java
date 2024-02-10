@@ -2,6 +2,7 @@ package com.techbuddy.goldendrop.mapper;
 
 import com.techbuddy.goldendrop.dto.ProductDTO;
 import com.techbuddy.goldendrop.model.Product;
+import com.techbuddy.goldendrop.model.ProductStockView;
 import com.techbuddy.goldendrop.model.Store;
 import com.techbuddy.goldendrop.request.ProductRequest;
 import org.mapstruct.Mapper;
@@ -17,6 +18,8 @@ import org.mapstruct.ReportingPolicy;
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface ProductMapper {
     ProductDTO map(Product product);
+
+    ProductDTO map(ProductStockView product);
 
     @Mapping(target = "store", source = "store")
     @Mapping(target = "id", ignore = true)

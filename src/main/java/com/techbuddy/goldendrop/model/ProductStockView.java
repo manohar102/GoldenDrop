@@ -30,4 +30,5 @@ public class ProductStockView extends BaseModel {
 
     private int inQuantity;
     private int outQuantity;
+    private Long storeId;
 }
