@@ -40,9 +40,12 @@ public class ProductController {
     @GetMapping
     @Operation(summary = "Get products of a store")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<List<ProductDTO>> getProductsByStoreId(@RequestParam Long storeId) {
-        // TODO - Fetch store id by context and add pageable
-        return ResponseEntity.ok(productService.getProductsByStoreId(storeId));
+    public ResponseEntity<List<ProductDTO>> getProductsByStoreId(
+            @RequestParam Long storeId,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        // TODO - Fetch store id by context
+        return ResponseEntity.ok(productService.getProductsByStoreId(storeId, pageNumber, pageSize));
     }
 
     @GetMapping("/popular")

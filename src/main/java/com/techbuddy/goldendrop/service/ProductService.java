@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,9 +48,10 @@ public class ProductService {
         return product.get();
     }
 
-    public List<ProductDTO> getProductsByStoreId(Long storeId) {
+    public List<ProductDTO> getProductsByStoreId(Long storeId, int pageNumber, int pageSize) {
         storeService.validateAndFetchStoreId(storeId);
-        List<ProductStockView> products = productStockViewRepository.findProductStockViewByStoreId(storeId);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        List<ProductStockView> products = productStockViewRepository.findProductStockViewByStoreId(storeId, pageable);
         return products.stream().map(productMapper::map).toList();
     }
 
