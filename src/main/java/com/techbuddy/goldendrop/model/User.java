@@ -25,8 +25,14 @@ public class User extends BaseModel implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "email")
-    private String email;
+    @Column(name = "user_name")
+    private String userName;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "shopkeeper_id")
+    private Long shopkeeperId;
 
     @Column(name = "password")
     private String password;
@@ -46,7 +52,7 @@ public class User extends BaseModel implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return userName;
     }
 
     @Override

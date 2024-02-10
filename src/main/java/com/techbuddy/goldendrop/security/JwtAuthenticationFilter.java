@@ -58,7 +58,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
         String jwtCookie = getJWTCookieValue(request);
         if (jwtCookie != null) {
             APIToken apiToken = jwtTokenService.parseToken(jwtCookie);
-            User user = userService.loadUserByUsername(apiToken.getEmail());
+            User user = userService.loadUserByUsername(apiToken.getUserName());
             if (!user.isEnabled()) {
                 throw new UserDeletedException("User is not active, please check with admin.");
             }

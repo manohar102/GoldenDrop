@@ -55,8 +55,8 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
         if (isLoginRequest(request)) {
             try {
                 LoginRequest loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
-                log.info(String.format("Attempting Authentication for username : %s", loginRequest.getEmail()));
-                User user = userService.loadUserByUsername(loginRequest.getEmail());
+                log.info(String.format("Attempting Authentication for username : %s", loginRequest.getUserName()));
+                User user = userService.loadUserByUsername(loginRequest.getUserName());
                 if (authenticate(user, loginRequest)) {
                     auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 } else {

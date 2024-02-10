@@ -9,6 +9,6 @@ import lombok.RequiredArgsConstructor;
 public class APIToken {
 
     private final Long userId;
-    private final String email;
+    private final String userName;
     private final UserRole role;
 }

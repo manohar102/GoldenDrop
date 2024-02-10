@@ -7,9 +7,17 @@ import com.techbuddy.goldendrop.model.UserStatus;
 import com.techbuddy.goldendrop.request.UserRequest;
 import com.techbuddy.goldendrop.service.UserService;
 import java.util.List;
+import java.util.Optional;
+
+import com.techbuddy.goldendrop.specification.UserSpecificationBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,19 +35,22 @@ public class UserController {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
-    public List<UserDTO> index() {
-        log.info("Request GET /user");
-        List<User> users = service.findAll();
-        return mapper.map(users);
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Page<UserDTO> index(UserSpecificationBuilder builder,
+                               @PageableDefault(value = 25, page = 0) Pageable pageable) {
+        log.info("Request GET /user/list");
+        Specification<User> spec = builder.build();
+        Page<User> users = service.findAll(spec, pageable);
+        List<UserDTO> userDTOS = mapper.map(users.getContent());
+        return new PageImpl<>(userDTOS, pageable, users.getTotalElements());
     }
 
     @GetMapping
     public UserDTO show() throws Exception {
         log.info("Request GET /user");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getPrincipal() != null) {
-            User user = (User) auth.getPrincipal();
+        Optional<User> loggedInUser = service.getLoggedInUser();
+        if (loggedInUser.isPresent()) {
+            User user = loggedInUser.get();
             return mapper.map(user);
         }
         throw new Exception("User Not found");
