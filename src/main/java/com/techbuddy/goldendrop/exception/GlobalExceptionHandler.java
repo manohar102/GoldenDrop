@@ -33,6 +33,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesMap);
     }
 
+    @ExceptionHandler(value = InvalidStockQuantityException.class)
+    public ResponseEntity invalidProductException(InvalidStockQuantityException exception) {
+        Map<String, List<String>> errorMessagesMap = new HashMap<>();
+        errorMessagesMap.put("errorMessages", List.of(exception.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesMap);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity invalidRequest(MethodArgumentNotValidException exception) {
         List<String> errorMessagesList = exception.getBindingResult().getAllErrors().stream()
