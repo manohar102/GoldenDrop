@@ -56,14 +56,6 @@ public class UserService implements UserDetailsService {
         return repository.save(user);
     }
 
-    public List<User> getAllWorkers() {
-        Optional<User> loggedInUser = getLoggedInUser();
-        if (loggedInUser.isPresent()) {
-            return repository.findAllByShopkeeperId(loggedInUser.get().getId());
-        }
-        return new ArrayList<>();
-    }
-
     public Optional<User> getLoggedInUser() {
         User user = null;
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

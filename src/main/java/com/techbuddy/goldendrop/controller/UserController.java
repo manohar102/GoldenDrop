@@ -56,13 +56,6 @@ public class UserController {
         throw new Exception("User Not found");
     }
 
-//    @GetMapping("/workers")
-//    public List<UserDTO> getAllWorkers() throws Exception {
-//        log.info("Request GET /user/workers");
-//        List<User> workers = service.getAllWorkers();
-//        return new PageImpl<>(mapper.map(workers), pageable, testCases.getTotalElements());
-//    }
-
     @PostMapping("/invite")
     @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     public UserDTO inviteUser(@RequestBody UserRequest request) {
