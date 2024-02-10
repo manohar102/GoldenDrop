@@ -2,14 +2,23 @@ package com.techbuddy.goldendrop.service;
 
 import com.techbuddy.goldendrop.model.User;
 import com.techbuddy.goldendrop.repository.UserRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import javax.swing.text.html.Option;
 
 @Service(value = "userService")
 @RequiredArgsConstructor(onConstructor = @__({@Autowired, @Lazy}))
@@ -18,16 +27,16 @@ public class UserService implements UserDetailsService {
     private final UserRepository repository;
 
     @Override
-    public User loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = repository.findByEmail(email);
+    public User loadUserByUsername(String userName) throws UsernameNotFoundException {
+        Optional<User> user = repository.findByUserName(userName);
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException(String.format("No User found with email : %s", email));
+            throw new UsernameNotFoundException(String.format("No User found with User Name : %s", userName));
         }
         return user.get();
     }
 
-    public List<User> findAll() {
-        return repository.findAll();
+    public Page<User> findAll(Specification<User> specification, Pageable pageable) {
+        return repository.findAll(specification, pageable);
     }
 
     public User findById(Long id) throws Exception {
@@ -36,14 +45,31 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new Exception(String.format("User not found with id : %d", id)));
     }
 
-    public User findByEmail(String email) {
+    public User findByUserName(String email) {
         return repository
-                .findByEmail(email)
+                .findByUserName(email)
                 .orElseThrow(
-                        () -> new UsernameNotFoundException(String.format("User not found with Email : %d", email)));
+                        () -> new UsernameNotFoundException(String.format("User not found with User Name : %d", email)));
     }
 
     public User save(User user) {
         return repository.save(user);
+    }
+
+    public List<User> getAllWorkers() {
+        Optional<User> loggedInUser = getLoggedInUser();
+        if (loggedInUser.isPresent()) {
+            return repository.findAllByShopkeeperId(loggedInUser.get().getId());
+        }
+        return new ArrayList<>();
+    }
+
+    public Optional<User> getLoggedInUser() {
+        User user = null;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() != null) {
+            user = (User) auth.getPrincipal();
+        }
+        return Optional.ofNullable(user);
     }
 }

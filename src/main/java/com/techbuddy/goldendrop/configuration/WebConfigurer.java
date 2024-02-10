@@ -1,6 +1,7 @@
 package com.techbuddy.goldendrop.configuration;
 
-import com.example.eshow.annotation.SpecificationHandlerMethodArgumentResolver;
+
+import com.techbuddy.goldendrop.annotation.SpecificationHandlerMethodArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

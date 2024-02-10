@@ -17,17 +17,17 @@ public class SearchCriteria {
         if(value instanceof String) {
             value = java.net.URLDecoder.decode(value.toString());
             return value.toString()
-                    .replaceAll("ts_like", "~")
-                    .replaceAll("ts_negation", "!")
-                    .replaceAll("ts_single_quote", "'")
-                    .replaceAll("ts_colon", ":")
-                    .replaceAll("ts_semicolon", ";")
-                    .replaceAll("ts_greater_than", ">")
-                    .replaceAll("ts_lesser_than", "<")
-                    .replaceAll("ts_at_sign", "@")
-                    .replaceAll("ts_dollar_sign", "$")
-                    .replaceAll("ts_asterisk", "*")
-                    .replaceAll("ts_comma", ",");
+                    .replaceAll("tb_like", "~")
+                    .replaceAll("tb_negation", "!")
+                    .replaceAll("tb_single_quote", "'")
+                    .replaceAll("tb_colon", ":")
+                    .replaceAll("tb_semicolon", ";")
+                    .replaceAll("tb_greater_than", ">")
+                    .replaceAll("tb_lesser_than", "<")
+                    .replaceAll("tb_at_sign", "@")
+                    .replaceAll("tb_dollar_sign", "$")
+                    .replaceAll("tb_asterisk", "*")
+                    .replaceAll("tb_comma", ",");
         } else {
             return value;
         }

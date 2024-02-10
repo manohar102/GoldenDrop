@@ -1,8 +1,8 @@
 package com.techbuddy.goldendrop.annotation;
 
-import com.example.eshow.specification.BaseSpecificationsBuilder;
-import com.example.eshow.specification.SearchOperation;
 import com.google.common.base.Joiner;
+import com.techbuddy.goldendrop.specification.BaseSpecificationsBuilder;
+import com.techbuddy.goldendrop.specification.SearchOperation;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;

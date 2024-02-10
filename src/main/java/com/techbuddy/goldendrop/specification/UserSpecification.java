@@ -1,17 +1,17 @@
 package com.techbuddy.goldendrop.specification;
 
-import com.example.eshow.model.Tenant;
+import com.techbuddy.goldendrop.model.User;
+import jakarta.persistence.criteria.*;
 import lombok.extern.log4j.Log4j2;
 
-import javax.persistence.criteria.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 @Log4j2
-public class TenantSpecification extends BaseSpecification<Tenant> {
-    public TenantSpecification(SearchCriteria criteria) {
+public class UserSpecification extends BaseSpecification<User> {
+    public UserSpecification(SearchCriteria criteria) {
         super(criteria);
     }
 
@@ -28,21 +28,7 @@ public class TenantSpecification extends BaseSpecification<Tenant> {
     }
 
     @Override
-    public Predicate toPredicate(Root<Tenant> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-        Predicate predicate;
-        if (this.criteria.getKey().equals("term")) {
-            predicate = builder.or(
-                    builder.like(root.get("organizationName"), "%" + criteria.getValue() + "%"),
-                    builder.like(root.get("description"), "%" + criteria.getValue() + "%"),
-                    builder.like(root.get("place"), "%" + criteria.getValue() + "%"),
-                    builder.equal(root.get("category"), getEnumValueIfEnum("category", criteria.getValue(), SearchOperation.EQUALITY)));
-        }else
-            predicate = super.toPredicate(root, query, builder);
-        return  predicate;
-    }
-
-    @Override
-    protected Expression<String> getPath(SearchCriteria criteria, Root<Tenant> root) {
+    protected Expression<String> getPath(SearchCriteria criteria, Root<User> root) {
         return root.get(criteria.getKey());
     }
 

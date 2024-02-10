@@ -1,8 +1,8 @@
 package com.techbuddy.goldendrop.specification;
 
+import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;

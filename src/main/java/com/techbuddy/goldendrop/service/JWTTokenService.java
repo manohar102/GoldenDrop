@@ -105,10 +105,10 @@ public class JWTTokenService implements Serializable {
     public String generateToken(APIToken apiToken) {
         ClaimsBuilder claimsBuilder = Jwts.claims();
         claimsBuilder
-                .subject(apiToken.getEmail())
+                .subject(apiToken.getUserName())
                 .add("role", apiToken.getRole())
                 .add("userId", apiToken.getUserId())
-                .add("email", apiToken.getEmail());
+                .add("username", apiToken.getUserName());
         Claims claims = claimsBuilder.build();
         return Jwts.builder()
                 .claims(claims)
