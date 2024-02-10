@@ -23,6 +23,5 @@ public class Store extends BaseModel {
 
     private String licenseId;
     private String name;
-    private String email;
     private String address;
 }
