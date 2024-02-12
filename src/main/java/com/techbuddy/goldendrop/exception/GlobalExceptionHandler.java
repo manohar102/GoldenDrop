@@ -34,10 +34,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = InvalidStockQuantityException.class)
-    public ResponseEntity invalidProductException(InvalidStockQuantityException exception) {
+    public ResponseEntity invalidStockQuantityException(InvalidStockQuantityException exception) {
         Map<String, List<String>> errorMessagesMap = new HashMap<>();
         errorMessagesMap.put("errorMessages", List.of(exception.getMessage()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesMap);
+    }
+
+    @ExceptionHandler(value = UserNotFoundException.class)
+    public ResponseEntity userNotFoundException(UserNotFoundException exception) {
+        Map<String, List<String>> errorMessagesMap = new HashMap<>();
+        errorMessagesMap.put("errorMessages", List.of(exception.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessagesMap);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

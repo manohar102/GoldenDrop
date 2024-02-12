@@ -1,6 +1,7 @@
 package com.techbuddy.goldendrop.controller;
 
 import com.techbuddy.goldendrop.dto.UserDTO;
+import com.techbuddy.goldendrop.exception.UserNotFoundException;
 import com.techbuddy.goldendrop.mapper.UserMapper;
 import com.techbuddy.goldendrop.model.User;
 import com.techbuddy.goldendrop.model.UserStatus;
@@ -19,8 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,12 +47,7 @@ public class UserController {
     @GetMapping
     public UserDTO show() throws Exception {
         log.info("Request GET /user");
-        Optional<User> loggedInUser = service.getLoggedInUser();
-        if (loggedInUser.isPresent()) {
-            User user = loggedInUser.get();
-            return mapper.map(user);
-        }
-        throw new Exception("User Not found");
+        return mapper.map(service.fetchUser().orElseThrow(() -> new UserNotFoundException("User " + "Not found")));
     }
 
     @PostMapping("/invite")
