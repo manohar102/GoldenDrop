@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -56,12 +58,11 @@ public class UserService implements UserDetailsService {
         return repository.save(user);
     }
 
-    public Optional<User> getLoggedInUser() {
-        User user = null;
+    public Optional<User> fetchUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getPrincipal() != null) {
-            user = (User) auth.getPrincipal();
+            return Optional.of((User) auth.getPrincipal());
         }
-        return Optional.ofNullable(user);
+        return Optional.empty();
     }
 }
