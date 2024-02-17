@@ -1,11 +1,9 @@
 package com.techbuddy.goldendrop.specification;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
-
-import java.util.List;
-
 
 @AllArgsConstructor
 @Data
@@ -29,8 +27,7 @@ public abstract class BaseSpecificationsBuilder {
                 }
             } else if (op == SearchOperation.CONTAINS) {
                 op = SearchOperation.CONTAINS;
-            } else if (op == SearchOperation.NOT_IN)
-                op = SearchOperation.NOT_IN;
+            } else if (op == SearchOperation.NOT_IN) op = SearchOperation.NOT_IN;
             params.add(new SearchCriteria(key, op, value));
         }
         return this;

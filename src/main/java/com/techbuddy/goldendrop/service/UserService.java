@@ -1,10 +1,12 @@
 package com.techbuddy.goldendrop.service;
 
+import com.techbuddy.goldendrop.exception.UserNotFoundException;
+import com.techbuddy.goldendrop.mapper.UserMapper;
 import com.techbuddy.goldendrop.model.User;
+import com.techbuddy.goldendrop.model.UserRole;
+import com.techbuddy.goldendrop.model.UserStatus;
 import com.techbuddy.goldendrop.repository.UserRepository;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.techbuddy.goldendrop.request.UserRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +16,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import javax.swing.text.html.Option;
 
 @Service(value = "userService")
 @RequiredArgsConstructor(onConstructor = @__({@Autowired, @Lazy}))
 public class UserService implements UserDetailsService {
 
     private final UserRepository repository;
+    private final UserMapper mapper;
 
     @Override
     public User loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -50,15 +49,27 @@ public class UserService implements UserDetailsService {
     public User findByUserName(String email) {
         return repository
                 .findByUserName(email)
-                .orElseThrow(
-                        () -> new UsernameNotFoundException(String.format("User not found with User Name : %d", email)));
+                .orElseThrow(() ->
+                        new UsernameNotFoundException(String.format("User not found with User Name : %d", email)));
     }
 
     public User save(User user) {
         return repository.save(user);
     }
 
-    public Optional<User> fetchUser() {
+    public User createUser(UserRequest request) {
+        return getLoggedInUser()
+                .map(adminUser -> {
+                    User user = mapper.map(request);
+                    user.setRole(UserRole.USER);
+                    user.setShopkeeperId(adminUser.getId());
+                    user.setStatus(UserStatus.ACTIVE);
+                    return save(user);
+                })
+                .orElseThrow(() -> new UserNotFoundException("No Logged in User Found"));
+    }
+
+    public Optional<User> getLoggedInUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getPrincipal() != null) {
             return Optional.of((User) auth.getPrincipal());

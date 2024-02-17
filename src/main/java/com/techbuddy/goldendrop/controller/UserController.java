@@ -7,10 +7,8 @@ import com.techbuddy.goldendrop.model.User;
 import com.techbuddy.goldendrop.model.UserStatus;
 import com.techbuddy.goldendrop.request.UserRequest;
 import com.techbuddy.goldendrop.service.UserService;
-import java.util.List;
-import java.util.Optional;
-
 import com.techbuddy.goldendrop.specification.UserSpecificationBuilder;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +33,8 @@ public class UserController {
 
     @GetMapping("/list")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Page<UserDTO> index(UserSpecificationBuilder builder,
-                               @PageableDefault(value = 25, page = 0) Pageable pageable) {
+    public Page<UserDTO> index(
+            UserSpecificationBuilder builder, @PageableDefault(value = 25, page = 0) Pageable pageable) {
         log.info("Request GET /user/list");
         Specification<User> spec = builder.build();
         Page<User> users = service.findAll(spec, pageable);
@@ -47,7 +45,25 @@ public class UserController {
     @GetMapping
     public UserDTO show() throws Exception {
         log.info("Request GET /user");
-        return mapper.map(service.fetchUser().orElseThrow(() -> new UserNotFoundException("User " + "Not found")));
+        return mapper.map(service.getLoggedInUser().orElseThrow(() -> new UserNotFoundException("User Not found")));
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public UserDTO create(@RequestBody UserRequest request) {
+        log.info("Request POST /user with request : " + request);
+        request.setPassword(passwordEncoder.encode(request.getPassword()));
+        return mapper.map(service.createUser(request));
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public UserDTO update(@PathVariable(value = "id") Long id, @RequestBody UserRequest request) throws Exception {
+        log.info(String.format("Request PUT /user/%d with request : " + request, id));
+        User user = service.findById(id);
+        mapper.merge(user, request);
+        service.save(user);
+        return mapper.map(user);
     }
 
     @PostMapping("/invite")

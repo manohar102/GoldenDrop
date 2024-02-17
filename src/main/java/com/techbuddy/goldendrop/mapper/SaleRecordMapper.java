@@ -1,13 +1,9 @@
 package com.techbuddy.goldendrop.mapper;
 
-import com.techbuddy.goldendrop.dto.ProductDTO;
 import com.techbuddy.goldendrop.dto.SaleRecordDTO;
-import com.techbuddy.goldendrop.model.Product;
-import com.techbuddy.goldendrop.model.ProductStockView;
 import com.techbuddy.goldendrop.model.SaleRecord;
 import com.techbuddy.goldendrop.model.Store;
 import com.techbuddy.goldendrop.model.User;
-import com.techbuddy.goldendrop.request.ProductRequest;
 import com.techbuddy.goldendrop.request.SaleRecordRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,11 +1,10 @@
 package com.techbuddy.goldendrop.specification;
 
 import com.techbuddy.goldendrop.model.User;
+import java.util.ArrayList;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.ArrayList;
-
-public class UserSpecificationBuilder extends BaseSpecificationsBuilder{
+public class UserSpecificationBuilder extends BaseSpecificationsBuilder {
     public UserSpecificationBuilder() {
         super(new ArrayList<>());
     }

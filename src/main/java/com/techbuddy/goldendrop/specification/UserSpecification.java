@@ -2,12 +2,11 @@ package com.techbuddy.goldendrop.specification;
 
 import com.techbuddy.goldendrop.model.User;
 import jakarta.persistence.criteria.*;
-import lombok.extern.log4j.Log4j2;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class UserSpecification extends BaseSpecification<User> {

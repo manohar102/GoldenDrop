@@ -1,7 +1,16 @@
 package com.techbuddy.goldendrop.specification;
 
 public enum SearchOperation {
-    EQUALITY, NEGATION, GREATER_THAN, LESS_THAN, LIKE, STARTS_WITH, ENDS_WITH, CONTAINS, IN, NOT_IN;
+    EQUALITY,
+    NEGATION,
+    GREATER_THAN,
+    LESS_THAN,
+    LIKE,
+    STARTS_WITH,
+    ENDS_WITH,
+    CONTAINS,
+    IN,
+    NOT_IN;
 
     public static final String[] SIMPLE_OPERATION_SET = {":", "!", ">", ";", "<", "~", "@"};
 

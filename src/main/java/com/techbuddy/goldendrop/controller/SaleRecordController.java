@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/sales")
-@RequiredArgsConstructor(onConstructor = @__({ @Autowired, @Lazy }))
+@RequiredArgsConstructor(onConstructor = @__({@Autowired, @Lazy}))
 @Validated
 public class SaleRecordController {
     private final SaleRecordService saleRecordService;

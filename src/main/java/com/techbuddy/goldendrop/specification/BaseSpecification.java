@@ -1,12 +1,10 @@
 package com.techbuddy.goldendrop.specification;
 
 import jakarta.persistence.criteria.*;
-import org.springframework.data.jpa.domain.Specification;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-
+import org.springframework.data.jpa.domain.Specification;
 
 public abstract class BaseSpecification<M> implements Specification<M> {
 
@@ -22,17 +20,23 @@ public abstract class BaseSpecification<M> implements Specification<M> {
         Object value = getEnumValueIfEnum(criteria.getKey(), criteria.getValue(), criteria.getOperation());
         switch (criteria.getOperation()) {
             case EQUALITY:
-                return "null".equals(value.toString()) ? builder.isNull(getPath(criteria, root)) :
-                        builder.equal(getPath(criteria, root), value);
+                return "null".equals(value.toString())
+                        ? builder.isNull(getPath(criteria, root))
+                        : builder.equal(getPath(criteria, root), value);
             case NEGATION:
-                return "null".equals(value.toString()) ? builder.isNotNull(getPath(criteria, root)) :
-                        builder.notEqual(getPath(criteria, root), value);
+                return "null".equals(value.toString())
+                        ? builder.isNotNull(getPath(criteria, root))
+                        : builder.notEqual(getPath(criteria, root), value);
             case GREATER_THAN:
-                return value instanceof Date ? builder.greaterThan(getPath(criteria, root).as(Date.class), (Date) value) :
-                        builder.greaterThan(getPath(criteria, root), criteria.getValue().toString());
+                return value instanceof Date
+                        ? builder.greaterThan(getPath(criteria, root).as(Date.class), (Date) value)
+                        : builder.greaterThan(
+                                getPath(criteria, root), criteria.getValue().toString());
             case LESS_THAN:
-                return value instanceof Date ? builder.lessThan(getPath(criteria, root).as(Date.class), (Date) value) :
-                        builder.lessThan(getPath(criteria, root), criteria.getValue().toString());
+                return value instanceof Date
+                        ? builder.lessThan(getPath(criteria, root).as(Date.class), (Date) value)
+                        : builder.lessThan(
+                                getPath(criteria, root), criteria.getValue().toString());
             case LIKE:
                 return builder.like(getPath(criteria, root), criteria.getValue().toString());
             case STARTS_WITH:
@@ -40,11 +44,14 @@ public abstract class BaseSpecification<M> implements Specification<M> {
             case ENDS_WITH:
                 return builder.like(getPath(criteria, root), "%" + criteria.getValue());
             case CONTAINS:
-                return builder.like(builder.lower(getPath(criteria, root)), "%" + criteria.getValue().toString().toLowerCase() + "%");
+                return builder.like(
+                        builder.lower(getPath(criteria, root)),
+                        "%" + criteria.getValue().toString().toLowerCase() + "%");
             case IN:
                 Expression<String> inExpression = getPath(criteria, root);
                 if (value instanceof String)
-                    return inExpression.in(Arrays.asList(criteria.getValue().toString().split("#")));
+                    return inExpression.in(
+                            Arrays.asList(criteria.getValue().toString().split("#")));
                 else {
                     if (((ArrayList) value).contains(null)) {
                         Predicate predicate = builder.or(builder.isNull(getPath(criteria, root)));
@@ -56,7 +63,9 @@ public abstract class BaseSpecification<M> implements Specification<M> {
             case NOT_IN:
                 inExpression = getPath(criteria, root);
                 if (value instanceof String)
-                    return inExpression.in(Arrays.asList(criteria.getValue().toString().split("#"))).not();
+                    return inExpression
+                            .in(Arrays.asList(criteria.getValue().toString().split("#")))
+                            .not();
                 else {
                     if (((ArrayList) value).contains(null)) {
                         Predicate predicate = builder.or(builder.isNull(getPath(criteria, root)));

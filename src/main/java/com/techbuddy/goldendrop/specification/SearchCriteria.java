@@ -14,7 +14,7 @@ public class SearchCriteria {
     private Object value;
 
     public Object getValue() {
-        if(value instanceof String) {
+        if (value instanceof String) {
             value = java.net.URLDecoder.decode(value.toString());
             return value.toString()
                     .replaceAll("tb_like", "~")

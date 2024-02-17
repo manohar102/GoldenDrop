@@ -2,7 +2,6 @@ package com.techbuddy.goldendrop.repository;
 
 import com.techbuddy.goldendrop.model.User;
 import jakarta.transaction.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
@@ -11,5 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends BaseRepository<User, Long> {
     Optional<User> findByUserName(String userName);
+
     List<User> findAllByShopkeeperId(Long shopKeeperId);
 }
