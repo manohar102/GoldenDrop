@@ -64,6 +64,7 @@ public class UserController {
         mapper.merge(user, request);
         service.save(user);
         return mapper.map(user);
+        
     }
 
     @PostMapping("/invite")
