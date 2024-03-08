@@ -6,6 +6,8 @@ import com.techbuddy.goldendrop.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class ProductController {
     @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<ProductDTO> createOrUpdate(
             @Valid @RequestBody @NotNull(message = "productRequest " + "cannot be " + "null")
-                    ProductRequest productRequest) {
+                    ProductRequest productRequest) throws IOException {
         return ResponseEntity.ok(productService.createOrUpdate(productRequest));
     }
 
@@ -51,6 +53,9 @@ public class ProductController {
     @GetMapping("/popular")
     @Operation(summary = "Get Top products")
     @ResponseStatus(code = HttpStatus.OK)
+    //public and private
+    //specification base
+    //relations
     public ResponseEntity<List<ProductDTO>> getTopFiveProducts(@RequestParam(required = false) Long storeId) {
         return ResponseEntity.ok(productService.getTopFiveProducts(storeId));
     }

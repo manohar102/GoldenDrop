@@ -2,6 +2,7 @@ package com.techbuddy.goldendrop.service;
 
 import com.techbuddy.goldendrop.exception.UserNotFoundException;
 import com.techbuddy.goldendrop.mapper.UserMapper;
+import com.techbuddy.goldendrop.model.Store;
 import com.techbuddy.goldendrop.model.User;
 import com.techbuddy.goldendrop.model.UserRole;
 import com.techbuddy.goldendrop.model.UserStatus;
@@ -26,6 +27,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository repository;
     private final UserMapper mapper;
+    private final StoreService storeService;
 
     @Override
     public User loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -58,12 +60,13 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(UserRequest request) {
+        Store store = storeService.validateAndFetchStoreId(request.getStoreId());
         return getLoggedInUser()
                 .map(adminUser -> {
                     User user = mapper.map(request);
                     user.setRole(UserRole.USER);
-                    user.setShopkeeperId(adminUser.getId());
                     user.setStatus(UserStatus.ACTIVE);
+                    user.setStore(store);
                     return save(user);
                 })
                 .orElseThrow(() -> new UserNotFoundException("No Logged in User Found"));

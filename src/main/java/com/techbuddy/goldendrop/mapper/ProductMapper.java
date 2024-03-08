@@ -30,6 +30,7 @@ public interface ProductMapper {
     @Mapping(target = "id", source = "existingProduct.id")
     @Mapping(target = "stockDetails", source = "existingProduct.stockDetails")
     @Mapping(target = "createdDate", source = "existingProduct.createdDate")
+    @Mapping(target = "imageName", source = "existingProduct.imageName")
     @Mapping(target = "updatedDate", ignore = true)
     @Mapping(target = "brandName", source = "productRequest.brandName")
     @Mapping(target = "type", source = "productRequest.type")

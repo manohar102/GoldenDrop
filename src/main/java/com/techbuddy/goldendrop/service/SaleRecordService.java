@@ -10,6 +10,10 @@ import com.techbuddy.goldendrop.notification.NotificationClient;
 import com.techbuddy.goldendrop.notification.WhatsAppClient;
 import com.techbuddy.goldendrop.repository.SaleRecordRepository;
 import com.techbuddy.goldendrop.request.SaleRecordRequest;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -25,11 +29,35 @@ public class SaleRecordService {
     private final NotificationClient notificationClient = new WhatsAppClient();
 
     public SaleRecordDTO create(SaleRecordRequest saleRecordRequest) {
-        User user = userService.getLoggedInUser().orElseThrow(() -> new UserNotFoundException("User " + "Not found"));
-        Store store = storeService.validateAndFetchStoreId(saleRecordRequest.getStoreId());
+        User user = fetchUser();
+        Store store = storeService.validateAndFetchStoreId(user.getStore().getId());
         SaleRecord saleRecord = saleRecordMapper.map(saleRecordRequest, store, user);
         saleRecordRepository.save(saleRecord);
         notificationClient.sendMessage();
         return saleRecordMapper.map(saleRecord);
+    }
+
+    public SaleRecordDTO getSaleRecordInAnInterval(Timestamp from, Timestamp to) {
+        User user = fetchUser();
+        Store store = storeService.validateAndFetchStoreId(user.getStore().getId());
+        if(to == null) {
+            to = new Timestamp(System.currentTimeMillis());
+        }
+        List<SaleRecord> saleRecords = new ArrayList<>();
+//            saleRecordRepository.findByStoreAndInterval(from, to);
+        SaleRecordDTO saleRecordDTO = new SaleRecordDTO();
+        for(SaleRecord saleRecord : saleRecords) {
+            saleRecordDTO.setSaleAmount(saleRecordDTO.getSaleAmount() + saleRecord.getSaleAmount());
+            saleRecordDTO.setDigitalAmount(saleRecordDTO.getDigitalAmount() + saleRecord.getDigitalAmount());
+            saleRecordDTO.setOnlineAmount(saleRecordDTO.getOnlineAmount() + saleRecord.getOnlineAmount());
+            saleRecordDTO.setExpenses(saleRecordDTO.getExpenses() + saleRecord.getExpenses());
+        }
+    return saleRecordDTO;
+    }
+
+
+    private User fetchUser() {
+        return userService.getLoggedInUser()
+                          .orElseThrow(() -> new UserNotFoundException("User " + "Not found"));
     }
 }

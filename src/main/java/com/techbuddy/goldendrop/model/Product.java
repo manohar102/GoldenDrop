@@ -45,4 +45,7 @@ public class Product extends BaseModel {
     private Store store;
 
     private String quantity;
+
+    @Column(name = "image_name")
+    private String imageName;
 }

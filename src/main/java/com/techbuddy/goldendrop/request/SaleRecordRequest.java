@@ -20,9 +20,6 @@ public class SaleRecordRequest {
     private Double expenses;
     private String comments;
 
-    @NotNull(message = "storeId cannot be null")
-    private Long storeId;
-
     @AssertFalse(message = "comments cannot be empty if any of the given amount is negative")
     @Schema(hidden = true)
     public boolean isCommentsProvided() {

@@ -12,4 +12,5 @@ public class UserRequest {
     private String phoneNumber;
     private String password;
     private UserRole role;
+    private Long storeId;
 }

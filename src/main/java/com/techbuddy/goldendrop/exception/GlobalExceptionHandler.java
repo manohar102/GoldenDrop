@@ -19,22 +19,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = InvalidStoreException.class)
-    public ResponseEntity invalidStoreException(InvalidStoreException exception) {
-        Map<String, List<String>> errorMessagesMap = new HashMap<>();
-        errorMessagesMap.put("errorMessages", List.of(exception.getMessage()));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesMap);
-    }
-
-    @ExceptionHandler(value = InvalidProductException.class)
-    public ResponseEntity invalidProductException(InvalidProductException exception) {
-        Map<String, List<String>> errorMessagesMap = new HashMap<>();
-        errorMessagesMap.put("errorMessages", List.of(exception.getMessage()));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesMap);
-    }
-
-    @ExceptionHandler(value = InvalidStockQuantityException.class)
-    public ResponseEntity invalidStockQuantityException(InvalidStockQuantityException exception) {
+    @ExceptionHandler(value = InvalidRequestException.class)
+    public ResponseEntity invalidStoreException(InvalidRequestException exception) {
         Map<String, List<String>> errorMessagesMap = new HashMap<>();
         errorMessagesMap.put("errorMessages", List.of(exception.getMessage()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesMap);
