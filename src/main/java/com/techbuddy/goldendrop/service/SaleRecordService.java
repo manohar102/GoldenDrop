@@ -29,7 +29,7 @@ public class SaleRecordService {
     private final NotificationClient notificationClient = new WhatsAppClient();
 
     public SaleRecordDTO create(SaleRecordRequest saleRecordRequest) {
-        User user = fetchUser();
+        User user = userService.fetchUser();
         Store store = storeService.validateAndFetchStoreId(user.getStore().getId());
         SaleRecord saleRecord = saleRecordMapper.map(saleRecordRequest, store, user);
         saleRecordRepository.save(saleRecord);
@@ -38,7 +38,7 @@ public class SaleRecordService {
     }
 
     public SaleRecordDTO getSaleRecordInAnInterval(Timestamp from, Timestamp to) {
-        User user = fetchUser();
+        User user = userService.fetchUser();
         Store store = storeService.validateAndFetchStoreId(user.getStore().getId());
         if(to == null) {
             to = new Timestamp(System.currentTimeMillis());
@@ -53,11 +53,5 @@ public class SaleRecordService {
             saleRecordDTO.setExpenses(saleRecordDTO.getExpenses() + saleRecord.getExpenses());
         }
     return saleRecordDTO;
-    }
-
-
-    private User fetchUser() {
-        return userService.getLoggedInUser()
-                          .orElseThrow(() -> new UserNotFoundException("User " + "Not found"));
     }
 }

@@ -7,6 +7,7 @@ import com.techbuddy.goldendrop.mapper.ProductMapper;
 import com.techbuddy.goldendrop.model.Product;
 import com.techbuddy.goldendrop.model.ProductStockView;
 import com.techbuddy.goldendrop.model.Store;
+import com.techbuddy.goldendrop.model.User;
 import com.techbuddy.goldendrop.repository.ProductRepository;
 import com.techbuddy.goldendrop.repository.ProductStockViewRepository;
 import com.techbuddy.goldendrop.request.ProductRequest;
@@ -35,17 +36,20 @@ public class ProductService {
     private final ProductStockViewRepository productStockViewRepository;
     private final AwsS3Service awsS3Service;
     private final AwsS3Config awsS3Config;
+    private final UserService userService;
 
     public ProductDTO createOrUpdate(ProductRequest productRequest) throws IOException {
 
-        Store store = storeService.validateAndFetchStoreId(productRequest.getStoreId());
+        User user = userService.fetchUser();
+        Long storeId = user.getStore().getId();
+        Store store = storeService.validateAndFetchStoreId(storeId);
         Product productToBeSavedOrUpdated;
 
-        if (productRequest.getProductId() == null) {
+        if (productRequest.getId() == null) {
             productToBeSavedOrUpdated = productMapper.map(productRequest, store);
         } else {
             Product existingProduct =
-                    fetchProductByProductIdAndStoreId(productRequest.getProductId(), productRequest.getStoreId());
+                    fetchProductByProductIdAndStoreId(productRequest.getId(), storeId);
             productToBeSavedOrUpdated = productMapper.map(productRequest, store, existingProduct);
         }
         setProductImageName(productRequest, productToBeSavedOrUpdated);

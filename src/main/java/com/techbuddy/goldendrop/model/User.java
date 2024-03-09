@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import lombok.Data;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,8 +44,12 @@ public class User extends BaseModel implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
-    @OneToOne
-    @JoinColumn(name = "store_id", referencedColumnName = "id")
+    @Column(name = "store_id")
+    private Long storeId;
+
+    @ManyToOne
+    @Fetch(value = FetchMode.SELECT)
+    @JoinColumn(name = "store_id", referencedColumnName = "id", insertable=false, updatable=false)
     private Store store;
 
     @Override

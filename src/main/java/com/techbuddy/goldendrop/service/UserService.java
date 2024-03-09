@@ -48,25 +48,18 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new Exception(String.format("User not found with id : %d", id)));
     }
 
-    public User findByUserName(String email) {
-        return repository
-                .findByUserName(email)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException(String.format("User not found with User Name : %d", email)));
-    }
-
     public User save(User user) {
         return repository.save(user);
     }
 
     public User createUser(UserRequest request) {
-        Store store = storeService.validateAndFetchStoreId(request.getStoreId());
+        User loggedInUser = fetchUser();
         return getLoggedInUser()
                 .map(adminUser -> {
                     User user = mapper.map(request);
                     user.setRole(UserRole.USER);
                     user.setStatus(UserStatus.ACTIVE);
-                    user.setStore(store);
+                    user.setStoreId(loggedInUser.getStoreId());
                     return save(user);
                 })
                 .orElseThrow(() -> new UserNotFoundException("No Logged in User Found"));
@@ -78,5 +71,10 @@ public class UserService implements UserDetailsService {
             return Optional.of((User) auth.getPrincipal());
         }
         return Optional.empty();
+    }
+
+    public User fetchUser() {
+        return getLoggedInUser()
+                .orElseThrow(() -> new UserNotFoundException("User " + "Not found"));
     }
 }
