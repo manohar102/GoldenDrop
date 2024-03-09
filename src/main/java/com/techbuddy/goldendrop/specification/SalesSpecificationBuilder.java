@@ -1,13 +1,15 @@
 package com.techbuddy.goldendrop.specification;
 
 import com.techbuddy.goldendrop.model.SaleRecord;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 
 public class SalesSpecificationBuilder extends BaseSpecificationsBuilder {
 
-    public SalesSpecificationBuilder(List<SearchCriteria> params) {
-        super(params);
+    public SalesSpecificationBuilder() {
+        super(new ArrayList<>());
     }
 
     public Specification<SaleRecord> build() {

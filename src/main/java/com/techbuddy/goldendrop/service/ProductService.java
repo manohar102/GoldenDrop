@@ -14,28 +14,44 @@ import com.techbuddy.goldendrop.request.ProductRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProductService {
-    private final ProductRepository productRepository;
+    private final ProductRepository repository;
     private final StoreService storeService;
     private final ProductMapper productMapper;
     private final ProductStockViewRepository productStockViewRepository;
     private final AwsS3Service awsS3Service;
     private final AwsS3Config awsS3Config;
     private final UserService userService;
+
+    public Page<Product> findAll(Specification<Product> specification, Pageable pageable) {
+        return repository.findAll(specification, pageable);
+    }
+
+    public List<Product> setPresignedUrlsForProduct(List<Product> products) {
+        return products.stream().map(product -> {
+            product.setUrl(getPresignedProductUrl(product));
+            return product;
+        }).collect(Collectors.toList());
+    }
 
     public ProductDTO createOrUpdate(ProductRequest productRequest) throws IOException {
 
@@ -51,13 +67,13 @@ public class ProductService {
             productToBeSavedOrUpdated = productMapper.map(productRequest, store, existingProduct);
         }
         setProductImageName(productRequest, productToBeSavedOrUpdated);
-        Product product = productRepository.save(productToBeSavedOrUpdated);
-        storeProductImage(productRequest);
+        Product product = repository.save(productToBeSavedOrUpdated);
+        storeProductImage(product, productRequest);
         return productMapper.map(product);
     }
 
     public Product fetchProductByProductIdAndStoreId(Long productId, Long storeId) {
-        Optional<Product> product = productRepository.findProductByIdAndAndStoreId(productId, storeId);
+        Optional<Product> product = repository.findProductByIdAndAndStoreId(productId, storeId);
         if (product.isEmpty()) {
             throw new InvalidProductException("Invalid productId/StoreId");
         }
@@ -87,16 +103,20 @@ public class ProductService {
         }
     }
 
-    public void storeProductImage(ProductRequest productRequest) throws IOException {
+    public void storeProductImage(Product product, ProductRequest productRequest) throws IOException {
         if (productRequest.getImageFile() != null) {
             File tempLocalFile = copyUploadToTempFile(productRequest.getImageFile());
-            String fileName = parseFileName(productRequest.getImageFile());
-            awsS3Service.putObject(getS3ImagePath(fileName), new FileInputStream(tempLocalFile));
+            awsS3Service.putObject(getS3ImagePath(product), new FileInputStream(tempLocalFile));
         }
     }
 
-    private String getS3ImagePath(String fileName) {
-        return awsS3Config.getBucketName() + AwsS3Service.S3_FILE_SEPERATOR + fileName;
+    private URL getPresignedProductUrl(Product product) {
+        return awsS3Service.generatePreSignedURL(getS3ImagePath(product));
+    }
+
+    private String getS3ImagePath(Product product) {
+        return "Products" + AwsS3Service.S3_FILE_SEPERATOR + product.getId() +
+                AwsS3Service.S3_FILE_SEPERATOR + product.getImageName();
     }
 
     private String parseFileName(MultipartFile uploadedFile) {

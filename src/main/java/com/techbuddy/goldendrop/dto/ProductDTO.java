@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.net.URL;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -19,4 +21,5 @@ public class ProductDTO {
     private String quantity;
     private int inQuantity;
     private int outQuantity;
+    private URL url;
 }
