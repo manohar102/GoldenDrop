@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class SaleRecordDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long id;
+
     private Double saleAmount;
     private Double digitalAmount;
     private Double onlineAmount;

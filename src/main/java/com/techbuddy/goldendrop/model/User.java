@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Data
 @ToString
 public class User extends BaseModel implements UserDetails {
-//store relation
+    // store relation
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,7 +49,7 @@ public class User extends BaseModel implements UserDetails {
 
     @ManyToOne
     @Fetch(value = FetchMode.SELECT)
-    @JoinColumn(name = "store_id", referencedColumnName = "id", insertable=false, updatable=false)
+    @JoinColumn(name = "store_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Store store;
 
     @Override

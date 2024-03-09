@@ -2,7 +2,6 @@ package com.techbuddy.goldendrop.service;
 
 import com.techbuddy.goldendrop.exception.UserNotFoundException;
 import com.techbuddy.goldendrop.mapper.UserMapper;
-import com.techbuddy.goldendrop.model.Store;
 import com.techbuddy.goldendrop.model.User;
 import com.techbuddy.goldendrop.model.UserRole;
 import com.techbuddy.goldendrop.model.UserStatus;
@@ -74,7 +73,6 @@ public class UserService implements UserDetailsService {
     }
 
     public User fetchUser() {
-        return getLoggedInUser()
-                .orElseThrow(() -> new UserNotFoundException("User " + "Not found"));
+        return getLoggedInUser().orElseThrow(() -> new UserNotFoundException("User " + "Not found"));
     }
 }

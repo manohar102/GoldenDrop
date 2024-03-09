@@ -11,7 +11,6 @@ import com.techbuddy.goldendrop.model.User;
 import com.techbuddy.goldendrop.repository.ProductRepository;
 import com.techbuddy.goldendrop.repository.ProductStockViewRepository;
 import com.techbuddy.goldendrop.request.ProductRequest;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -48,8 +47,7 @@ public class ProductService {
         if (productRequest.getId() == null) {
             productToBeSavedOrUpdated = productMapper.map(productRequest, store);
         } else {
-            Product existingProduct =
-                    fetchProductByProductIdAndStoreId(productRequest.getId(), storeId);
+            Product existingProduct = fetchProductByProductIdAndStoreId(productRequest.getId(), storeId);
             productToBeSavedOrUpdated = productMapper.map(productRequest, store, existingProduct);
         }
         setProductImageName(productRequest, productToBeSavedOrUpdated);
@@ -83,27 +81,29 @@ public class ProductService {
     }
 
     private void setProductImageName(ProductRequest productRequest, Product product) {
-        if(productRequest.getImageFile() != null) {
+        if (productRequest.getImageFile() != null) {
             String fileName = parseFileName(productRequest.getImageFile());
             product.setImageName(fileName);
         }
     }
 
     public void storeProductImage(ProductRequest productRequest) throws IOException {
-        if(productRequest.getImageFile() != null) {
+        if (productRequest.getImageFile() != null) {
             File tempLocalFile = copyUploadToTempFile(productRequest.getImageFile());
             String fileName = parseFileName(productRequest.getImageFile());
-            awsS3Service.putObject(getS3ImagePath(fileName),  new FileInputStream(tempLocalFile));
+            awsS3Service.putObject(getS3ImagePath(fileName), new FileInputStream(tempLocalFile));
         }
     }
 
     private String getS3ImagePath(String fileName) {
-        return  awsS3Config.getBucketName() + AwsS3Service.S3_FILE_SEPERATOR + fileName;
+        return awsS3Config.getBucketName() + AwsS3Service.S3_FILE_SEPERATOR + fileName;
     }
 
     private String parseFileName(MultipartFile uploadedFile) {
-        return  ObjectUtils.defaultIfNull(uploadedFile.getOriginalFilename(), "tmp")
-                .replaceAll("\\s+", "_").replaceAll("/", ":").replaceAll(",","");
+        return ObjectUtils.defaultIfNull(uploadedFile.getOriginalFilename(), "tmp")
+                .replaceAll("\\s+", "_")
+                .replaceAll("/", ":")
+                .replaceAll(",", "");
     }
 
     private File copyUploadToTempFile(MultipartFile uploadedFile) throws IOException {

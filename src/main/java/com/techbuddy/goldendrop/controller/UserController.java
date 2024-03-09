@@ -39,7 +39,8 @@ public class UserController {
             UserSpecificationBuilder builder, @PageableDefault(value = 25, page = 0) Pageable pageable) {
         log.info("Request GET /user/list");
         User user = service.fetchUser();
-        SearchCriteria criteria = new SearchCriteria("storeId", SearchOperation.EQUALITY, user.getStore().getId());
+        SearchCriteria criteria = new SearchCriteria(
+                "storeId", SearchOperation.EQUALITY, user.getStore().getId());
         builder.params.add(criteria);
 
         Specification<User> spec = builder.build();

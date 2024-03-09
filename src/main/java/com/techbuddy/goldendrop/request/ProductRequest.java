@@ -4,11 +4,9 @@ import com.techbuddy.goldendrop.enums.ProductType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.Getter;
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Nullable;
+import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Valid
 @Data

@@ -2,7 +2,6 @@ package com.techbuddy.goldendrop.repository;
 
 import com.techbuddy.goldendrop.model.User;
 import jakarta.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 

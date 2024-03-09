@@ -1,7 +1,7 @@
 package com.techbuddy.goldendrop.service;
 
 import com.techbuddy.goldendrop.dto.SaleRecordDTO;
-import com.techbuddy.goldendrop.exception.UserNotFoundException;
+import com.techbuddy.goldendrop.dto.TimePeriod;
 import com.techbuddy.goldendrop.mapper.SaleRecordMapper;
 import com.techbuddy.goldendrop.model.SaleRecord;
 import com.techbuddy.goldendrop.model.Store;
@@ -11,10 +11,9 @@ import com.techbuddy.goldendrop.notification.WhatsAppClient;
 import com.techbuddy.goldendrop.repository.SaleRecordRepository;
 import com.techbuddy.goldendrop.request.SaleRecordRequest;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -40,18 +39,27 @@ public class SaleRecordService {
     public SaleRecordDTO getSaleRecordInAnInterval(Timestamp from, Timestamp to) {
         User user = userService.fetchUser();
         Store store = storeService.validateAndFetchStoreId(user.getStore().getId());
-        if(to == null) {
+        if (to == null) {
             to = new Timestamp(System.currentTimeMillis());
         }
-        List<SaleRecord> saleRecords = new ArrayList<>();
-//            saleRecordRepository.findByStoreAndInterval(from, to);
+        List<SaleRecord> saleRecords =
+                saleRecordRepository.findByCreatedDateIsGreaterThanEqualAndCreatedDateIsLessThanEqualAndStore(
+                        from, to, store);
         SaleRecordDTO saleRecordDTO = new SaleRecordDTO();
-        for(SaleRecord saleRecord : saleRecords) {
-            saleRecordDTO.setSaleAmount(saleRecordDTO.getSaleAmount() + saleRecord.getSaleAmount());
-            saleRecordDTO.setDigitalAmount(saleRecordDTO.getDigitalAmount() + saleRecord.getDigitalAmount());
-            saleRecordDTO.setOnlineAmount(saleRecordDTO.getOnlineAmount() + saleRecord.getOnlineAmount());
-            saleRecordDTO.setExpenses(saleRecordDTO.getExpenses() + saleRecord.getExpenses());
+        for (SaleRecord saleRecord : saleRecords) {
+            saleRecordDTO.setSaleAmount(
+                    ObjectUtils.defaultIfNull(saleRecordDTO.getSaleAmount(), 0.0) + saleRecord.getSaleAmount());
+            saleRecordDTO.setDigitalAmount(
+                    ObjectUtils.defaultIfNull(saleRecordDTO.getDigitalAmount(), 0.0) + saleRecord.getDigitalAmount());
+            saleRecordDTO.setOnlineAmount(
+                    ObjectUtils.defaultIfNull(saleRecordDTO.getOnlineAmount(), 0.0) + saleRecord.getOnlineAmount());
+            saleRecordDTO.setExpenses(
+                    ObjectUtils.defaultIfNull(saleRecordDTO.getExpenses(), 0.0) + saleRecord.getExpenses());
         }
-    return saleRecordDTO;
+        return saleRecordDTO;
+    }
+
+    public TimePeriod getSalesPeriods() {
+        return saleRecordRepository.getSalesPeriods();
     }
 }
