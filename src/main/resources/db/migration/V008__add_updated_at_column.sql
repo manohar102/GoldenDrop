@@ -1,8 +1,0 @@
-ALTER TABLE product
-ADD COLUMN updated_at datetime DEFAULT CURRENT_TIMESTAMP;
-ALTER TABLE users
-    ADD COLUMN updated_at datetime DEFAULT CURRENT_TIMESTAMP;
-ALTER TABLE store
-    ADD COLUMN updated_at datetime DEFAULT CURRENT_TIMESTAMP;
-ALTER TABLE stock_detail
-    ADD COLUMN updated_at datetime DEFAULT CURRENT_TIMESTAMP;

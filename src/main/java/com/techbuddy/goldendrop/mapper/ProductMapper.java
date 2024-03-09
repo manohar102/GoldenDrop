@@ -11,6 +11,8 @@ import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 @Mapper(
         componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
@@ -30,9 +32,12 @@ public interface ProductMapper {
     @Mapping(target = "id", source = "existingProduct.id")
     @Mapping(target = "stockDetails", source = "existingProduct.stockDetails")
     @Mapping(target = "createdDate", source = "existingProduct.createdDate")
+    @Mapping(target = "imageName", source = "existingProduct.imageName")
     @Mapping(target = "updatedDate", ignore = true)
     @Mapping(target = "brandName", source = "productRequest.brandName")
     @Mapping(target = "type", source = "productRequest.type")
     @Mapping(target = "quantity", source = "productRequest.quantity")
     Product map(ProductRequest productRequest, Store store, Product existingProduct);
+
+    List<ProductDTO> map(List<Product> content);
 }

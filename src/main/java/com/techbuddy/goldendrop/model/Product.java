@@ -3,17 +3,9 @@ package com.techbuddy.goldendrop.model;
 import static jakarta.persistence.FetchType.LAZY;
 
 import com.techbuddy.goldendrop.enums.ProductType;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+
+import java.net.URL;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,4 +37,11 @@ public class Product extends BaseModel {
     private Store store;
 
     private String quantity;
+
+    @Column(name = "image_name")
+    private String imageName;
+
+    @Transient
+    private URL url;
 }
+

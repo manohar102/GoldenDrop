@@ -1,10 +1,7 @@
 package com.techbuddy.goldendrop.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,4 +21,7 @@ public class Store extends BaseModel {
     private String licenseId;
     private String name;
     private String address;
+
+    @OneToMany(mappedBy = "store")
+    private List<User> users;
 }

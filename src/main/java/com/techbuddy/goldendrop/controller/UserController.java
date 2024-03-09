@@ -7,6 +7,8 @@ import com.techbuddy.goldendrop.model.User;
 import com.techbuddy.goldendrop.model.UserStatus;
 import com.techbuddy.goldendrop.request.UserRequest;
 import com.techbuddy.goldendrop.service.UserService;
+import com.techbuddy.goldendrop.specification.SearchCriteria;
+import com.techbuddy.goldendrop.specification.SearchOperation;
 import com.techbuddy.goldendrop.specification.UserSpecificationBuilder;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,11 @@ public class UserController {
     public Page<UserDTO> index(
             UserSpecificationBuilder builder, @PageableDefault(value = 25, page = 0) Pageable pageable) {
         log.info("Request GET /user/list");
+        User user = service.fetchUser();
+        SearchCriteria criteria = new SearchCriteria(
+                "storeId", SearchOperation.EQUALITY, user.getStore().getId());
+        builder.params.add(criteria);
+
         Specification<User> spec = builder.build();
         Page<User> users = service.findAll(spec, pageable);
         List<UserDTO> userDTOS = mapper.map(users.getContent());

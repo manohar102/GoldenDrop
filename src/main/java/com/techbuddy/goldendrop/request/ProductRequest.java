@@ -4,10 +4,12 @@ import com.techbuddy.goldendrop.enums.ProductType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
+import javax.annotation.Nullable;
+import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
-@Getter
 @Valid
+@Data
 public class ProductRequest {
     @NotBlank(message = "brandName cannot be null")
     private String brandName;
@@ -15,11 +17,12 @@ public class ProductRequest {
     @NotNull(message = "type cannot be null")
     private ProductType type;
 
-    @NotNull(message = "storeId cannot be null")
-    private Long storeId;
-
     @NotNull(message = "quantity cannot be null")
     private String quantity;
 
-    private Long productId;
+    @Nullable
+    private MultipartFile imageFile;
+
+    @Nullable
+    private Long id;
 }
