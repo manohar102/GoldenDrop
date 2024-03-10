@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface SaleRecordRepository extends BaseRepository<SaleRecord, Long> {
 
-    @Query("SELECT min(sale.createdDate) as startTime, max(sale.createdDate) as endTime FROM SaleRecord sale")
-    TimePeriod getSalesPeriods();
+    @Query("SELECT min(sale.createdDate) as startTime, max(sale.createdDate) as endTime FROM SaleRecord sale WHERE sale.store=:store")
+    TimePeriod getSalesPeriods(Store store);
 
     List<SaleRecord> findAllByCreatedDateAndStore(Timestamp timestamp, Store store);
 

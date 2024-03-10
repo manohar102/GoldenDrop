@@ -60,6 +60,8 @@ public class SaleRecordService {
     }
 
     public TimePeriod getSalesPeriods() {
-        return saleRecordRepository.getSalesPeriods();
+        User user = userService.fetchUser();
+        Store store = storeService.validateAndFetchStoreId(user.getStore().getId());
+        return saleRecordRepository.getSalesPeriods(store);
     }
 }
