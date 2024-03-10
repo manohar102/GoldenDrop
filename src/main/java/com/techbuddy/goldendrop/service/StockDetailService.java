@@ -14,6 +14,9 @@ import com.techbuddy.goldendrop.request.StockDetailRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +27,10 @@ public class StockDetailService {
     private final ProductService productService;
     private final StockDetailRepository stockDetailRepository;
     private final ProductStockViewRepository productStockViewRepository;
+
+    public Page<StockDetail> findAll(Specification<StockDetail> specification, Pageable pageable) {
+        return stockDetailRepository.findAll(specification, pageable);
+    }
 
     public List<StockDetailDTO> create(List<StockDetailRequest> stockDetailsRequest) {
 

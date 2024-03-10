@@ -1,8 +1,7 @@
 package com.techbuddy.goldendrop.specification;
 
-import java.util.ArrayList;
-
 import com.techbuddy.goldendrop.model.ProductStockView;
+import java.util.ArrayList;
 import org.springframework.data.jpa.domain.Specification;
 
 public class ProductStockViewSpecificationBuilder extends BaseSpecificationsBuilder {

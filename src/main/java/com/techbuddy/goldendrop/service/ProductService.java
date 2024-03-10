@@ -1,6 +1,5 @@
 package com.techbuddy.goldendrop.service;
 
-import com.techbuddy.goldendrop.configuration.AwsS3Config;
 import com.techbuddy.goldendrop.dto.ProductDTO;
 import com.techbuddy.goldendrop.exception.InvalidProductException;
 import com.techbuddy.goldendrop.mapper.ProductMapper;
