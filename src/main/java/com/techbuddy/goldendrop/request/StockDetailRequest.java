@@ -12,8 +12,6 @@ public class StockDetailRequest {
     @NotNull(message = "productId cannot be null")
     private Long productId;
 
-    @NotNull(message = "productPrice cannot be null")
-    @Min(value = 1, message = "productPrice must be greater than zero")
     private Double productPrice;
 
     @NotNull(message = "stockTransactionType cannot be null")
@@ -22,4 +20,13 @@ public class StockDetailRequest {
     @NotNull(message = "quantity cannot be null")
     @Min(value = 1, message = "quantity must be greater than zero")
     private Integer quantity;
+
+    @AssertFalse(message = "productPrice cannot be null or 0 if stock type is IN")
+    @Schema(hidden = true)
+    public boolean isProductPricePresent() {
+        if(type != null && type.equals(StockTransactionType.IN)) {
+            return productPrice != null && productPrice >0;
+        }
+        return true;
+    }
 }
