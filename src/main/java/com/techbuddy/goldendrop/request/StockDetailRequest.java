@@ -22,7 +22,4 @@ public class StockDetailRequest {
     @NotNull(message = "quantity cannot be null")
     @Min(value = 1, message = "quantity must be greater than zero")
     private Integer quantity;
-
-    @NotNull(message = "storeId cannot be null")
-    private Long storeId;
 }

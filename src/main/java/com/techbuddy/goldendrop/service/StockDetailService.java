@@ -5,9 +5,7 @@ import static com.techbuddy.goldendrop.model.StockTransactionType.isOutStock;
 import com.techbuddy.goldendrop.dto.StockDetailDTO;
 import com.techbuddy.goldendrop.exception.InvalidStockQuantityException;
 import com.techbuddy.goldendrop.mapper.StockDetailMapper;
-import com.techbuddy.goldendrop.model.Product;
-import com.techbuddy.goldendrop.model.ProductStockView;
-import com.techbuddy.goldendrop.model.StockDetail;
+import com.techbuddy.goldendrop.model.*;
 import com.techbuddy.goldendrop.repository.ProductStockViewRepository;
 import com.techbuddy.goldendrop.repository.StockDetailRepository;
 import com.techbuddy.goldendrop.request.StockDetailRequest;
@@ -27,6 +25,7 @@ public class StockDetailService {
     private final ProductService productService;
     private final StockDetailRepository stockDetailRepository;
     private final ProductStockViewRepository productStockViewRepository;
+    private final UserService userService;
 
     public Page<StockDetail> findAll(Specification<StockDetail> specification, Pageable pageable) {
         return stockDetailRepository.findAll(specification, pageable);
@@ -34,10 +33,13 @@ public class StockDetailService {
 
     public List<StockDetailDTO> create(List<StockDetailRequest> stockDetailsRequest) {
 
+        User user = userService.fetchUser();
+        Store store = user.getStore();
+
         List<StockDetail> stockDetailListToBeSaved = stockDetailsRequest.stream()
                 .map(request -> {
                     Product product = productService.fetchProductByProductIdAndStoreId(
-                            request.getProductId(), request.getStoreId());
+                            request.getProductId(), store.getId());
                     validateStockQuantity(request, product);
                     return stockDetailMapper.map(request, product);
                 })

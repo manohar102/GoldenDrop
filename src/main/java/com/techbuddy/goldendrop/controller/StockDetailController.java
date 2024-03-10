@@ -3,8 +3,11 @@ package com.techbuddy.goldendrop.controller;
 import com.techbuddy.goldendrop.dto.StockDetailDTO;
 import com.techbuddy.goldendrop.mapper.StockDetailMapper;
 import com.techbuddy.goldendrop.model.StockDetail;
+import com.techbuddy.goldendrop.model.Store;
+import com.techbuddy.goldendrop.model.User;
 import com.techbuddy.goldendrop.request.StockDetailRequest;
 import com.techbuddy.goldendrop.service.StockDetailService;
+import com.techbuddy.goldendrop.service.UserService;
 import com.techbuddy.goldendrop.specification.StockDetailsSpecificationBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -33,6 +36,7 @@ public class StockDetailController {
 
     private final StockDetailService service;
     private final StockDetailMapper mapper;
+    private final UserService userService;
 
     @GetMapping
     @Operation(summary = "Get Sale Records of a product")
@@ -54,9 +58,11 @@ public class StockDetailController {
                     @NotNull(message = "stockDetailsRequest " + "cannot be " + "null")
                     @Size(min = 1, message = "stockDetailsRequest cannot be empty")
                     List<StockDetailRequest> stockDetailsRequest) {
-        log.info(
-                "Creating stock details for storeId {}",
-                stockDetailsRequest.get(0).getStoreId());
+
+        User user = userService.fetchUser();
+        Store store = user.getStore();
+
+        log.info("Creating stock details for storeId {}", store.getId());
         return ResponseEntity.ok(service.create(stockDetailsRequest));
     }
 }
