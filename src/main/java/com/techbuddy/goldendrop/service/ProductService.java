@@ -15,17 +15,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -47,10 +46,15 @@ public class ProductService {
     }
 
     public List<Product> setPresignedUrlsForProduct(List<Product> products) {
-        return products.stream().map(product -> {
-            product.setUrl(getPresignedProductUrl(product));
-            return product;
-        }).collect(Collectors.toList());
+        return products.stream()
+                .peek(product -> product.setUrl(getPresignedProductUrl(product)))
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductStockView> setPresignedUrlsForProductStockView(List<ProductStockView> products) {
+        return products.stream()
+                .peek(productStockView -> productStockView.setUrl(getPresignedProductUrl(productStockView)))
+                .collect(Collectors.toList());
     }
 
     public ProductDTO createOrUpdate(ProductRequest productRequest) throws IOException {
@@ -80,21 +84,17 @@ public class ProductService {
         return product.get();
     }
 
-    public List<ProductDTO> getProductsByStoreId(Long storeId, int pageNumber, int pageSize) {
-        storeService.validateAndFetchStoreId(storeId);
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        List<ProductStockView> products = productStockViewRepository.findProductStockViewByStoreId(storeId, pageable);
-        return products.stream().map(productMapper::map).toList();
-    }
-
     public List<ProductDTO> getTopFiveProducts() {
-        Optional<User> user = userService.getLoggedInUser() ;
-        Long storeId = user.isEmpty() ? null : user.get().getStoreId();
-        List<ProductStockView> products = productStockViewRepository.findTop5ByStoreIdOrderByOutQuantityDesc(storeId);
-        List<Product> productList = setPresignedUrlsForProduct(productMapper.mapTo(products));
-        List<ProductDTO> productDTOS = productMapper.map(productList);
-//        return products.stream().map(productMapper::map).toList();
-        return productDTOS;
+        Optional<User> user = userService.getLoggedInUser();
+        Long storeId = user.map(User::getStoreId).orElse(null);
+        List<ProductStockView> products = new ArrayList<>();
+        if (storeId == null) {
+            products = productStockViewRepository.findTop5ByOrderByOutQuantityDesc();
+        } else {
+            products = productStockViewRepository.findTop5ByStoreIdOrderByOutQuantityDesc(storeId);
+        }
+        List<ProductStockView> productStockViewList = setPresignedUrlsForProductStockView(products);
+        return productMapper.mapToDTOs(productStockViewList);
     }
 
     private void setProductImageName(ProductRequest productRequest, Product product) {
@@ -115,9 +115,18 @@ public class ProductService {
         return awsS3Service.generatePreSignedURL(getS3ImagePath(product));
     }
 
+    private URL getPresignedProductUrl(ProductStockView productStockView) {
+        return awsS3Service.generatePreSignedURL(getS3ImagePath(productStockView));
+    }
+
     private String getS3ImagePath(Product product) {
-        return "Products" + AwsS3Service.S3_FILE_SEPERATOR + product.getId() +
-                AwsS3Service.S3_FILE_SEPERATOR + product.getImageName();
+        return "Products" + AwsS3Service.S3_FILE_SEPERATOR + product.getId() + AwsS3Service.S3_FILE_SEPERATOR
+                + product.getImageName();
+    }
+
+    private String getS3ImagePath(ProductStockView productStockView) {
+        return "Products" + AwsS3Service.S3_FILE_SEPERATOR + productStockView.getId() + AwsS3Service.S3_FILE_SEPERATOR
+                + productStockView.getImageName();
     }
 
     private String parseFileName(MultipartFile uploadedFile) {

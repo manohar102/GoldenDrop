@@ -4,7 +4,6 @@ import static jakarta.persistence.FetchType.LAZY;
 
 import com.techbuddy.goldendrop.enums.ProductType;
 import jakarta.persistence.*;
-
 import java.net.URL;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -50,4 +49,3 @@ public class Product extends BaseModel {
     @Transient
     private int outQuantity;
 }
-

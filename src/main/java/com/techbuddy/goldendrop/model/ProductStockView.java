@@ -1,11 +1,8 @@
 package com.techbuddy.goldendrop.model;
 
 import com.techbuddy.goldendrop.enums.ProductType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import java.net.URL;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,4 +31,7 @@ public class ProductStockView extends BaseModel {
     private int inQuantity;
     private int outQuantity;
     private Long storeId;
+
+    @Transient
+    private URL url;
 }

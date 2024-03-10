@@ -5,13 +5,12 @@ import com.techbuddy.goldendrop.model.Product;
 import com.techbuddy.goldendrop.model.ProductStockView;
 import com.techbuddy.goldendrop.model.Store;
 import com.techbuddy.goldendrop.request.ProductRequest;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
-
-import java.util.List;
 
 @Mapper(
         componentModel = "spring",
@@ -22,6 +21,8 @@ public interface ProductMapper {
     ProductDTO map(Product product);
 
     ProductDTO map(ProductStockView product);
+
+    List<ProductDTO> mapToDTOs(List<ProductStockView> productStockViews);
 
     List<Product> mapTo(List<ProductStockView> stockViews);
 

@@ -1,7 +1,6 @@
 package com.techbuddy.goldendrop.controller;
 
 import com.techbuddy.goldendrop.dto.ProductDTO;
-import com.techbuddy.goldendrop.dto.UserDTO;
 import com.techbuddy.goldendrop.mapper.ProductMapper;
 import com.techbuddy.goldendrop.model.Product;
 import com.techbuddy.goldendrop.model.User;
@@ -11,7 +10,6 @@ import com.techbuddy.goldendrop.service.UserService;
 import com.techbuddy.goldendrop.specification.ProductSpecificationBuilder;
 import com.techbuddy.goldendrop.specification.SearchCriteria;
 import com.techbuddy.goldendrop.specification.SearchOperation;
-import com.techbuddy.goldendrop.specification.UserSpecificationBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -27,7 +25,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,17 +65,6 @@ public class ProductController {
             throws IOException {
         return ResponseEntity.ok(service.createOrUpdate(productRequest));
     }
-
-//    @GetMapping
-//    @Operation(summary = "Get products of a store")
-//    @ResponseStatus(code = HttpStatus.OK)
-//    public ResponseEntity<List<ProductDTO>> getProductsByStoreId(
-//            @RequestParam Long storeId,
-//            @RequestParam(defaultValue = "0") int pageNumber,
-//            @RequestParam(defaultValue = "10") int pageSize) {
-//        // TODO - Fetch store id by context
-//        return ResponseEntity.ok(service.getProductsByStoreId(storeId, pageNumber, pageSize));
-//    }
 
     @GetMapping("/popular")
     @Operation(summary = "Get Top products")

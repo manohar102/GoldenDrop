@@ -16,5 +16,4 @@ public class ProductSpecification extends BaseSpecification<Product> {
         }
         return root.get(criteria.getKey());
     }
-
 }

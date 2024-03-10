@@ -13,4 +13,7 @@ public interface ProductStockViewRepository extends BaseRepository<ProductStockV
     @Query(
             "SELECT psv FROM ProductStockView psv WHERE (:storeId IS NULL OR psv.storeId = :storeId) ORDER BY psv.outQuantity DESC")
     List<ProductStockView> findTop5ByStoreIdOrderByOutQuantityDesc(Long storeId);
+
+    @Query("SELECT psv FROM ProductStockView psv ORDER BY psv.outQuantity DESC")
+    List<ProductStockView> findTop5ByOrderByOutQuantityDesc();
 }

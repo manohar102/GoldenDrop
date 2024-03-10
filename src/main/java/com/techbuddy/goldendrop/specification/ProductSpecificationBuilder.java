@@ -1,10 +1,8 @@
 package com.techbuddy.goldendrop.specification;
 
 import com.techbuddy.goldendrop.model.Product;
-import org.springframework.data.jpa.domain.Specification;
-
 import java.util.ArrayList;
-import java.util.List;
+import org.springframework.data.jpa.domain.Specification;
 
 public class ProductSpecificationBuilder extends BaseSpecificationsBuilder {
 
@@ -25,5 +23,4 @@ public class ProductSpecificationBuilder extends BaseSpecificationsBuilder {
 
         return result;
     }
-
 }
