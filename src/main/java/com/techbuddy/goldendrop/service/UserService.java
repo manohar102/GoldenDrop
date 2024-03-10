@@ -66,7 +66,7 @@ public class UserService implements UserDetailsService {
 
     public Optional<User> getLoggedInUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getPrincipal() != null) {
+        if (auth != null && auth.getPrincipal() != null && auth.getPrincipal() != "anonymousUser") {
             return Optional.of((User) auth.getPrincipal());
         }
         return Optional.empty();

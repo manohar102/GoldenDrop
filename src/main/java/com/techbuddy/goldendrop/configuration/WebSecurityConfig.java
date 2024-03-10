@@ -67,6 +67,8 @@ public class WebSecurityConfig {
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, URLConstants.SWAGGER_URL)
                 .permitAll()
+                .requestMatchers(HttpMethod.GET, URLConstants.PRODUCT_POPULAR_URL)
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

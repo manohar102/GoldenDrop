@@ -37,6 +37,9 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
             new AntPathRequestMatcher(URLConstants.SWAGGER_URL, HttpMethod.GET.toString()),
             new AntPathRequestMatcher(URLConstants.SWAGGER_API_DOCS_URL, HttpMethod.GET.toString()));
 
+    private final RequestMatcher productPropularRequestMatcher =
+            new AntPathRequestMatcher(URLConstants.PRODUCT_POPULAR_URL, HttpMethod.GET.toString());
+
     @Autowired
     UserService userService;
 
@@ -101,7 +104,8 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
         return super.requiresAuthentication(request, response)
                 && !isLoginRequest(request)
                 && !isRegistrationRequest(request)
-                && !isSwaggerRequest(request);
+                && !isSwaggerRequest(request)
+                && !isProductPopularRequest(request);
     }
 
     private boolean isLoginRequest(HttpServletRequest request) {
@@ -114,5 +118,9 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
     private boolean isSwaggerRequest(HttpServletRequest request) {
         return swaggerRequestMatcher.stream().anyMatch(antMatcher -> antMatcher.matches(request));
+    }
+
+    private boolean isProductPopularRequest(HttpServletRequest request) {
+        return productPropularRequestMatcher.matches(request);
     }
 }
