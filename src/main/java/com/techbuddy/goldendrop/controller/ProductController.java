@@ -2,12 +2,12 @@ package com.techbuddy.goldendrop.controller;
 
 import com.techbuddy.goldendrop.dto.ProductDTO;
 import com.techbuddy.goldendrop.mapper.ProductMapper;
-import com.techbuddy.goldendrop.model.Product;
+import com.techbuddy.goldendrop.model.ProductStockView;
 import com.techbuddy.goldendrop.model.User;
 import com.techbuddy.goldendrop.request.ProductRequest;
 import com.techbuddy.goldendrop.service.ProductService;
 import com.techbuddy.goldendrop.service.UserService;
-import com.techbuddy.goldendrop.specification.ProductSpecificationBuilder;
+import com.techbuddy.goldendrop.specification.ProductStockViewSpecificationBuilder;
 import com.techbuddy.goldendrop.specification.SearchCriteria;
 import com.techbuddy.goldendrop.specification.SearchOperation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,17 +42,17 @@ public class ProductController {
     @GetMapping
     @Operation(summary = "Get products of a store")
     public Page<ProductDTO> index(
-            ProductSpecificationBuilder builder, @PageableDefault(value = 25, page = 0) Pageable pageable) {
+            ProductStockViewSpecificationBuilder builder, @PageableDefault(value = 25, page = 0) Pageable pageable) {
         log.info("Request GET /user");
         User user = userService.fetchUser();
         SearchCriteria criteria = new SearchCriteria(
                 "storeId", SearchOperation.EQUALITY, user.getStore().getId());
         builder.params.add(criteria);
 
-        Specification<Product> spec = builder.build();
-        Page<Product> products = service.findAll(spec, pageable);
-        List<Product> productList = service.setPresignedUrlsForProduct(products.getContent());
-        List<ProductDTO> productDTOS = mapper.map(productList);
+        Specification<ProductStockView> spec = builder.build();
+        Page<ProductStockView> products = service.findAll(spec, pageable);
+        List<ProductStockView> productList = service.setPresignedUrlsForProductStockView(products.getContent());
+        List<ProductDTO> productDTOS = mapper.mapToDTOs(productList);
         return new PageImpl<>(productDTOS, pageable, products.getTotalElements());
     }
 

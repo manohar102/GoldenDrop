@@ -38,11 +38,10 @@ public class ProductService {
     private final ProductMapper productMapper;
     private final ProductStockViewRepository productStockViewRepository;
     private final AwsS3Service awsS3Service;
-    private final AwsS3Config awsS3Config;
     private final UserService userService;
 
-    public Page<Product> findAll(Specification<Product> specification, Pageable pageable) {
-        return repository.findAll(specification, pageable);
+    public Page<ProductStockView> findAll(Specification<ProductStockView> specification, Pageable pageable) {
+        return productStockViewRepository.findAll(specification, pageable);
     }
 
     public List<Product> setPresignedUrlsForProduct(List<Product> products) {
