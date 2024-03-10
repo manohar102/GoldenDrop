@@ -1,7 +1,9 @@
 package com.techbuddy.goldendrop.request;
 
 import com.techbuddy.goldendrop.model.StockTransactionType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.AssertFalse;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -24,9 +26,9 @@ public class StockDetailRequest {
     @AssertFalse(message = "productPrice cannot be null or 0 if stock type is IN")
     @Schema(hidden = true)
     public boolean isProductPricePresent() {
-        if(type != null && type.equals(StockTransactionType.IN)) {
-            return productPrice != null && productPrice >0;
+        if (type != null && type.equals(StockTransactionType.IN)) {
+            return productPrice == null || productPrice <= 0;
         }
-        return true;
+        return false;
     }
 }
