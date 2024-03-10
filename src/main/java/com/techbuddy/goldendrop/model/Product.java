@@ -43,5 +43,11 @@ public class Product extends BaseModel {
 
     @Transient
     private URL url;
+
+    @Transient
+    private int inQuantity;
+
+    @Transient
+    private int outQuantity;
 }
 

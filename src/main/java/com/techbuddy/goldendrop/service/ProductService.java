@@ -87,13 +87,14 @@ public class ProductService {
         return products.stream().map(productMapper::map).toList();
     }
 
-    public List<ProductDTO> getTopFiveProducts(Long storeId) {
-        if (storeId != null) {
-            storeService.validateAndFetchStoreId(storeId);
-        }
-
+    public List<ProductDTO> getTopFiveProducts() {
+        Optional<User> user = userService.getLoggedInUser() ;
+        Long storeId = user.isEmpty() ? null : user.get().getStoreId();
         List<ProductStockView> products = productStockViewRepository.findTop5ByStoreIdOrderByOutQuantityDesc(storeId);
-        return products.stream().map(productMapper::map).toList();
+        List<Product> productList = setPresignedUrlsForProduct(productMapper.mapTo(products));
+        List<ProductDTO> productDTOS = productMapper.map(productList);
+//        return products.stream().map(productMapper::map).toList();
+        return productDTOS;
     }
 
     private void setProductImageName(ProductRequest productRequest, Product product) {

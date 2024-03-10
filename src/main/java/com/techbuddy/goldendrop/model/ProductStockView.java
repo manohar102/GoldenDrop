@@ -26,6 +26,9 @@ public class ProductStockView extends BaseModel {
     @Enumerated(EnumType.STRING)
     private ProductType type;
 
+    @Column(name = "image_name")
+    private String imageName;
+
     private String quantity;
 
     private int inQuantity;

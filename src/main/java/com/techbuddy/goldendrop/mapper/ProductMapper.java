@@ -23,6 +23,8 @@ public interface ProductMapper {
 
     ProductDTO map(ProductStockView product);
 
+    List<Product> mapTo(List<ProductStockView> stockViews);
+
     @Mapping(target = "store", source = "store")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdDate", ignore = true)

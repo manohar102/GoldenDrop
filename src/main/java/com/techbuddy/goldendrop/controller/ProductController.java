@@ -83,10 +83,7 @@ public class ProductController {
     @GetMapping("/popular")
     @Operation(summary = "Get Top products")
     @ResponseStatus(code = HttpStatus.OK)
-    // public and private
-    // specification base
-    // relations
-    public ResponseEntity<List<ProductDTO>> getTopFiveProducts(@RequestParam(required = false) Long storeId) {
-        return ResponseEntity.ok(service.getTopFiveProducts(storeId));
+    public ResponseEntity<List<ProductDTO>> getTopFiveProducts() {
+        return ResponseEntity.ok(service.getTopFiveProducts());
     }
 }
