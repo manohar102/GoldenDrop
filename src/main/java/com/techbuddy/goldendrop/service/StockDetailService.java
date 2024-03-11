@@ -38,10 +38,10 @@ public class StockDetailService {
 
         List<StockDetail> stockDetailListToBeSaved = stockDetailsRequest.stream()
                 .map(request -> {
-                    Product product = productService.fetchProductByProductIdAndStoreId(
-                            request.getProductId(), store.getId());
+                    Product product =
+                            productService.fetchProductByProductIdAndStoreId(request.getProductId(), store.getId());
                     validateStockQuantity(request, product);
-                    return stockDetailMapper.map(request, product);
+                    return stockDetailMapper.map(request, product, user);
                 })
                 .toList();
 

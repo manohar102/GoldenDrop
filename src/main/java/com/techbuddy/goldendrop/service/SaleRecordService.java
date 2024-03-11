@@ -6,8 +6,7 @@ import com.techbuddy.goldendrop.mapper.SaleRecordMapper;
 import com.techbuddy.goldendrop.model.SaleRecord;
 import com.techbuddy.goldendrop.model.Store;
 import com.techbuddy.goldendrop.model.User;
-import com.techbuddy.goldendrop.notification.NotificationClient;
-import com.techbuddy.goldendrop.notification.WhatsAppClient;
+import com.techbuddy.goldendrop.notification.EmailClient;
 import com.techbuddy.goldendrop.repository.SaleRecordRepository;
 import com.techbuddy.goldendrop.request.SaleRecordRequest;
 import java.sql.Timestamp;
@@ -25,14 +24,14 @@ public class SaleRecordService {
     private final StoreService storeService;
     private final SaleRecordMapper saleRecordMapper;
     private final SaleRecordRepository saleRecordRepository;
-    private final NotificationClient notificationClient = new WhatsAppClient();
+    private final EmailClient notificationClient;
 
     public SaleRecordDTO create(SaleRecordRequest saleRecordRequest) {
         User user = userService.fetchUser();
         Store store = storeService.validateAndFetchStoreId(user.getStore().getId());
         SaleRecord saleRecord = saleRecordMapper.map(saleRecordRequest, store, user);
         saleRecordRepository.save(saleRecord);
-        notificationClient.sendMessage();
+        notificationClient.sendMessage(saleRecord);
         return saleRecordMapper.map(saleRecord);
     }
 

@@ -10,4 +10,5 @@ public class StockDetailDTO {
     private int quantity;
     public Timestamp createdDate;
     private Long productId;
+    private UserDTO user;
 }

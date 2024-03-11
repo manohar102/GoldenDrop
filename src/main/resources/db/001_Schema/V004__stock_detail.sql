@@ -4,6 +4,7 @@ CREATE TABLE `stock_detail` (
     `type` varchar(3) DEFAULT NULL,
     `quantity` int NOT NULL,
     `product_id` bigint NOT NULL,
+    `created_by`  bigint NOT NULL,
     `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
     `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),

@@ -37,4 +37,8 @@ public class StockDetail extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private User user;
 }

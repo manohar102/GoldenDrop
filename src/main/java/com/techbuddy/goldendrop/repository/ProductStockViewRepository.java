@@ -2,7 +2,6 @@ package com.techbuddy.goldendrop.repository;
 
 import com.techbuddy.goldendrop.model.ProductStockView;
 import java.util.List;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ProductStockViewRepository extends BaseRepository<ProductStockView, Long> {
