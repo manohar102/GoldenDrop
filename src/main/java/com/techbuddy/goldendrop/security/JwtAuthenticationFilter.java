@@ -10,8 +10,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +22,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import java.io.IOException;
+import java.util.List;
 
 public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -42,12 +43,10 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
     @Autowired
     UserService userService;
-
-    @Autowired
-    private JWTTokenService jwtTokenService;
-
     @Autowired
     AuthenticationManager authenticationManager;
+    @Autowired
+    private JWTTokenService jwtTokenService;
 
     public JwtAuthenticationFilter(String string) {
         super(string);

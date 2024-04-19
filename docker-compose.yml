@@ -1,0 +1,13 @@
+networks:
+  net: ~
+version: "3"
+services:
+  app:
+    image: "golden-drop-server:latest"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - net

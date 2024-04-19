@@ -1,8 +1,7 @@
 package com.techbuddy.goldendrop.dto;
 
-import java.sql.Timestamp;
-
 import com.techbuddy.goldendrop.model.StockTransactionType;
+import java.sql.Timestamp;
 import lombok.Data;
 
 @Data
