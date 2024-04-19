@@ -7,6 +7,7 @@ import com.techbuddy.goldendrop.model.SaleRecord;
 import com.techbuddy.goldendrop.model.Store;
 import com.techbuddy.goldendrop.model.User;
 import com.techbuddy.goldendrop.notification.EmailClient;
+import com.techbuddy.goldendrop.notification.WhatsAppClient;
 import com.techbuddy.goldendrop.repository.SaleRecordRepository;
 import com.techbuddy.goldendrop.request.SaleRecordRequest;
 import java.sql.Timestamp;
@@ -24,7 +25,7 @@ public class SaleRecordService {
     private final StoreService storeService;
     private final SaleRecordMapper saleRecordMapper;
     private final SaleRecordRepository saleRecordRepository;
-    private final EmailClient notificationClient;
+    private final WhatsAppClient notificationClient;
 
     public SaleRecordDTO create(SaleRecordRequest saleRecordRequest) {
         User user = userService.fetchUser();
