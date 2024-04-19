@@ -4,7 +4,7 @@ services:
 
   goldendrop_server:
     container_name: goldendrop-app-server
-    image: techbuddy/goldendrop:app-server
+    image: techbuddy24/goldendrop:app-server
     ports:
       - "8080:8080"
     networks:
@@ -12,7 +12,7 @@ services:
 
   goldendrop_server_ui:
     container_name: goldendrop-app-server-ui
-    image: techbuddy/goldendrop:app-server-ui
+    image: techbuddy24/goldendrop:app-server-ui
     ports:
       - "3000:80"
     networks:

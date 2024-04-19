@@ -68,7 +68,7 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
-                "http://host.docker.internal:3000", "http://localhost:3000"));
+                "http://host.docker.internal:3000", "http://localhost:3000", "http://65.2.183.188:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("content-type"));
         configuration.setAllowCredentials(true);
